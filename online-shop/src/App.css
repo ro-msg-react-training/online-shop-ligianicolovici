@@ -20,3 +20,30 @@
 .App-link {
   color: #09d3ac;
 }
+div .content{
+  border: #282c34;
+  border-width: 12px;
+  border-style: solid;
+
+
+  
+}
+div .products{
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  padding: 10px;
+  width: 30%;
+  margin-left: 2%;
+ 
+}
+div .product{
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  text-align: center;
+}
+h2{
+  text-align: bottom;
+  background-color:rgb(93, 190, 228);
+  border: #09d3ac 2px;
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+}
