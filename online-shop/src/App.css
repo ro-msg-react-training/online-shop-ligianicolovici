@@ -41,9 +41,24 @@ div .product{
   padding: 20px;
   text-align: center;
 }
-h2{
-  text-align: bottom;
+span{
+  vertical-align: bottom;
+  text-align: center;
+  font-size: 37px;
   background-color:rgb(93, 190, 228);
-  border: #09d3ac 2px;
   font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+}
+div .productDetails{
+  border: black solid 2px;
+  align-content:space-between;
+  margin-right: 40%;
+  margin-left:30%; 
+  margin-bottom: 2%;
+  width: 40%;
+
+}
+div .productDetails textarea{
+  font-size: 23px;
+  width: 45%;
+  height:50%;
 }

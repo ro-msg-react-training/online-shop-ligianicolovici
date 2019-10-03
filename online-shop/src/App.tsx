@@ -1,11 +1,12 @@
 import React from 'react';
 import './App.css';
-import PostList from './Product'
+import ProductList, { ProductDetails } from './Product'
 
 const App: React.FC = () => {
   return (
     <div className="App">
-        <PostList/>     
+        {/* <ProductDetails/> */}
+        <ProductList/>     
     </div>
   );
 }
