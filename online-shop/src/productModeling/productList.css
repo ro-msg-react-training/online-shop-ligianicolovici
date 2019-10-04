@@ -8,8 +8,8 @@ div .content{
   div .products{
     display: grid;
     grid-template-columns: auto auto auto auto;
-    padding: 10px;
-    width: 30%;
+    padding: 20px;
+    width: auto;
    
   }
   div .product{
@@ -20,7 +20,7 @@ div .content{
   span{
     vertical-align: bottom;
     text-align: center;
-    font-size: 37px;
+    font-size: 20px;
     background-color:rgb(93, 190, 228);
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
   }

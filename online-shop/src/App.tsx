@@ -5,6 +5,7 @@ import './productModeling/productList.css';
 import PostData from './products.json';
 import ProductList from './productModeling/ProductList';
 import ProductDetails from './productModeling/Product';
+import './App.sass';
 
 export interface IProduct{
   id:number;
