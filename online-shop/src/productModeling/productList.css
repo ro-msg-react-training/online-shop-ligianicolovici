@@ -1,26 +1,34 @@
 
 div .content{
-    border: #282c34;
+    border: #214d66e1;
     border-width: 12px;
     border-style: solid;
+
     
   }
   div .products{
     display: grid;
-    grid-template-columns: auto auto auto auto;
-    padding: 20px;
-    width: auto;
+    grid-template-columns: auto auto auto auto auto  ;
+    width: 100%;
+    align-content: flex-start;
    
   }
   div .product{
     border: 1px solid rgba(0, 0, 0, 0.8);
-    padding: 20px;
-    text-align: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 8px;
+    margin-top: 10px;
+    padding: 40px; 
+    height: 96.5%;
+   
+    /*
+    
+    margin: 0px;
+    text-align: center; */
   }
-  span{
-    vertical-align: bottom;
-    text-align: center;
+  div .product .price-tag{
+    align-self: flex-end;
     font-size: 20px;
-    background-color:rgb(93, 190, 228);
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
   }
