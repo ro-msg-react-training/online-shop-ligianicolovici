@@ -6,13 +6,17 @@ export interface IProduct {
   price: number;
   description: string;
 }
+export interface ICartProduct{
+  product:IProduct;
+  quantity:number
+}
 
 // ----- App ----- //
 export interface IPropsApp {
   data?: any;
 }
 export interface IStateApp {
-  itemsCart: IProduct[];
+  itemsCart:ICartProduct[];
   products: IProduct[];
 }
 export interface ArrayOfProductImages {
@@ -287,20 +291,46 @@ export interface IStateProducts {
 }
 // ----- ShoppingCart ----- //
 export interface IPropsCart {
-  data: IProduct[];
+  data: ICartProduct[];
+  onDeleteItemFromShopping:any;
 }
 export interface IStateCart {
-  cartProducts: IProduct[];
+  cartProducts: ICartProduct[];
+  hasProducts:boolean;
+  responseFromBackend:number;
+  showModal:boolean;
 }
-
+export interface IOrder{
+  productId:number;
+  quantity:number;
+}
 // ----- ProductDetails ----- //
 export interface IPropsDetails {
   data?: IProduct;
   match?: any;
   onAddProduct?: any;
   onDeleteProduct?: any;
+  
 }
 export interface IStateDetails {
   dataToExport: IProduct;
   selectedProduct: IProduct;
+  showModel:boolean;
+  messagePopUp:string;
+  titlePopUp:string;
+  productToDelete:IProduct;
+}
+// --------- PopUp --------- //
+export interface IPropsModal{
+  title:String;
+  data?: String;
+  active:boolean;
+  onClosing:any;
+  onDeleteProduct?:any;
+  productToDelete:IProduct
+}
+export interface IStateModal{
+  message?: String;
+  titlePopUp?:String;
+  actived:boolean;
 }

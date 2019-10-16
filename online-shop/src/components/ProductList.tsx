@@ -19,7 +19,7 @@ export class ProductList extends React.Component<IPropsProductList> {
     ));
     return (
       <React.Fragment>
-        <div className="content">
+        <div id="content">
           <div className="products">{products}</div>
         </div>
       </React.Fragment>

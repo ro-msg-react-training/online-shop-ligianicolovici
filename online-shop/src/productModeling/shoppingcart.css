@@ -1,33 +1,96 @@
-.table {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-  }
-  
-  .table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-  }
-  
-  .table tr:nth-child(even){background-color: #f2f2f2;}
-  
-  .table tr:hover {background-color: #ddd;}
-  
-  .table th {
-    border: 1px solid rgba(95, 126, 145, 0.226);
-    padding: 8px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: center;
-    background-color: rgba(50, 139, 199, 0.788);
-    color: white;
 
-  }
-  div .cart-list{
-    margin-left:10px;
-    margin-right:10px;
-    margin-bottom:10px;
-  }
-  div .content{
-    height: 100vh;
-  }
+div .cart-list {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+div .content {
+  height: 100vh;
+  text-align: center;
+}
+div .shoppingCart-Items {
+  display: grid;
+  height: auto;
+  align-content: center;
+  grid-template-columns: auto ;
+  grid-gap: 10px;
+  padding: 10px;
+
+}
+#cartItem{
+  display: grid;
+  grid-template-areas:
+  'header header header header header header'
+  'menu main main main right right'
+  'menu footer footer footer footer footer';
+
+  background: transparent;
+  overflow: hidden;
+  width:auto;
+  height: 20vh;
+  box-shadow: 1px 1px 2px 2px #BBC6CC;
+  padding: 5px 5px 0px 5px;
+  border-radius: 5px;
+  margin: auto;
+ 
+}
+#cartItem-img{
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding-left: 5px;
+  margin-bottom: 10px;
+}
+#cartItem-details{
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  font-size: 15px;
+  width: 500px;
+  
+}
+#cartItem-details{
+  margin-top: 1px;
+}
+#cart-item-modifier{
+  grid-area: right; 
+  text-align: top;
+}
+#deleteItem{
+  margin-top:4px;
+}
+.checkoutSum{
+  box-shadow: 1px 1px 2px 2px #BBC6CC;
+  border-radius: 5px;
+  width:290px;
+  height: 50px;
+  padding: 6px;
+  text-align: center;
+  margin-left: 54.5%;
+  display: grid;
+  grid-template-columns: auto auto;
+
+}
+.checkoutButton{
+    text-align: center;
+}
+div .total-Sum{
+  text-align: center;
+}
+.content> h1{
+  font-family:Arial, Helvetica, sans-serif;
+  box-shadow: 1px 1px 2px 1px #BBC6CC;
+  border-radius: 5px;
+  background-color: rgb(255, 46, 116);
+  margin:auto;
+  margin-top: 5px;
+  width: 400px;
+  height: 40px;
+  color:white
+}
+#product-img{
+  height: 18vh;
+  width: 190px;
+}
+.checkoutSum{
+    float: right;
+    margin-right: 480px;
+}
