@@ -10,7 +10,8 @@ import {
   QuantityUP,
   QuantityDown,
   EraseItem,
-  CheckOut
+  CheckOut,
+  FetchOrder
 } from "../actions/shoppingActions";
 
 const initialShoppingState: IStateCart = {
@@ -20,7 +21,8 @@ const initialShoppingState: IStateCart = {
   responseFromBackend: 0,
   showModal: false,
   modalTitle: "default",
-  modalText: "default"
+  modalText: "default",
+  json:""
 };
 
 export function shoppingCartManipulation(
@@ -36,7 +38,8 @@ export function shoppingCartManipulation(
         showModal: false,
         orderItem: state.orderItem,
         modalText: state.modalText,
-        modalTitle: state.modalTitle
+        modalTitle: state.modalTitle,
+        json:state.json
       };
     case "LOAD-CART":
       const loadAction: LoadCart = action as LoadCart;
@@ -47,7 +50,8 @@ export function shoppingCartManipulation(
         showModal: false,
         orderItem: state.orderItem,
         modalText: state.modalText,
-        modalTitle: state.modalTitle
+        modalTitle: state.modalTitle,
+        json:state.json
       };
     case "INCREASE-QUANTITY":
       const addAction: QuantityUP = action as QuantityUP;
@@ -58,7 +62,8 @@ export function shoppingCartManipulation(
         showModal: false,
         orderItem: state.orderItem,
         modalText: state.modalText,
-        modalTitle: state.modalTitle
+        modalTitle: state.modalTitle,
+        json:state.json
       };
     case "DECREASE-QUANTITY":
       const eraseAction: QuantityDown = action as QuantityDown;
@@ -69,7 +74,8 @@ export function shoppingCartManipulation(
         showModal: false,
         orderItem: state.orderItem,
         modalText: state.modalText,
-        modalTitle: state.modalTitle
+        modalTitle: state.modalTitle,
+        json:state.json
       };
     case "DELETE-PRODUCT-FROM-CART":
       const deleteAction: EraseItem = action as EraseItem;
@@ -82,7 +88,8 @@ export function shoppingCartManipulation(
         showModal: false,
         orderItem: state.orderItem,
         modalText: state.modalText,
-        modalTitle: state.modalTitle
+        modalTitle: state.modalTitle,
+        json:state.json
       };
 
     case "CHECK-OUT":
@@ -94,8 +101,18 @@ export function shoppingCartManipulation(
         showModal: true,
         orderItem: state.orderItem,
         modalText: checkOutAction.modalText,
-        modalTitle: checkOutAction.modalTitle
+        modalTitle: checkOutAction.modalTitle,
+        json:state.json
       };
+      case "FETCH-ORDER":
+          const fetchAction: FetchOrder = action as FetchOrder;
+          return {
+            ...state,
+            cartProducts:fetchAction.cartProducts,
+            modalText:fetchAction.modalText,
+            modalTitle:fetchAction.modalTitle,
+            json:fetchAction.json
+          };
 
     default:
       return state;

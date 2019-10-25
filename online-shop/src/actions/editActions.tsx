@@ -3,6 +3,8 @@ export const READ_PRODUCT = "READ-PRODUCT";
 export const UPDATE_PRODUCT = "UPDATE-PRODUCT";
 export const ADD_NEW_PRODUCT = "ADD_NEW_PRODUCT";
 export const SAVE_CATEGORIES = "SAVE-CATEGORIES";
+export const FETCH_UPDATE = "FETCH-UPDATE";
+export const FETCH_ADD = "FETCH-ADD";
 
 export interface ProductTranfer {
   type: typeof READ_PRODUCT;
@@ -22,6 +24,15 @@ export interface AddProduct {
 export interface SaveCategories {
   type: typeof SAVE_CATEGORIES;
   categories: string[];
+}
+export interface FetchUpdateProduct {
+  type: typeof FETCH_UPDATE;
+  productID: number;
+  productUpdated: IProduct;
+}
+export interface FetchAddNewProduct {
+  type: typeof FETCH_ADD;
+  productUpdated: IProduct;
 }
 export function displayProduct(
   data: IProduct,
@@ -60,9 +71,27 @@ export function categoriesListSaving(categories: string[]): EditActions {
     categories: categories
   };
 }
+export function fetchUpdateProduct(
+  id: number,
+  productUpdated: IProduct
+): EditActions {
+  return {
+    type: FETCH_UPDATE,
+    productID: id,
+    productUpdated: productUpdated
+  };
+}
+export function fetchAddNewProduct(productUpdated: IProduct): EditActions {
+  return {
+    type: FETCH_ADD,
+    productUpdated: productUpdated
+  };
+}
 
 export type EditActions =
   | AddProduct
   | ProductTranfer
   | UpdateProduct
-  | SaveCategories;
+  | SaveCategories
+  | FetchUpdateProduct
+  | FetchAddNewProduct;

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { ProductImagesUrls } from "../model/Interfaces";
 import { AppState } from "../reducers/combine";
 import { Dispatch } from "redux";
-import { loadProducts } from "../actions/productListActions";
+import { loadProducts, fetchTheList } from "../actions/productListActions";
 import { connect } from "react-redux";
 import defaultImg from "../default.jpg";
 
@@ -17,23 +17,12 @@ interface ProductListProps {
   productList: IProduct[];
   isLoading: boolean;
   loadProducts: (data: IProduct[], isLoading: boolean) => void;
+  fetchList: () => void;
 }
 
 export class ProductList extends React.Component<ProductListProps> {
   callLoadProducts() {
-    let fetchedList: IProduct[] = [];
-    let loadingStatus: boolean = true;
-
-    fetch("http://localhost:4000/products", { method: "GET" })
-      .then(response => response.json())
-      .then(result => {
-        fetchedList = result;
-        loadingStatus = false;
-      })
-      .catch(error => {
-        loadingStatus = false;
-      })
-      .then(() => this.props.loadProducts(fetchedList, loadingStatus));
+    this.props.fetchList();
   }
   componentDidMount() {
     this.callLoadProducts();
@@ -78,7 +67,8 @@ const mapStateToProps = (state: AppState, myOwnState: LocalState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   loadProducts: (data: IProduct[], isLoading: boolean) =>
-    dispatch(loadProducts(data, isLoading))
+    dispatch(loadProducts(data, isLoading)),
+  fetchList: () => dispatch(fetchTheList())
 });
 
 const ProductListInitializer = connect(

@@ -3,7 +3,10 @@ import {
   DetailsActions,
   ProductOperations,
   ProductDisplay,
-  ModalOn
+  ModalOn,
+  FETCH_SELECTED,
+  FetchSelectedProduct,
+  FETCH_DELETE
 } from "../actions/productActions";
 
 const initialDetailsState: IStateDetails = {
@@ -13,7 +16,8 @@ const initialDetailsState: IStateDetails = {
   messagePopUp: "",
   titlePopUp: "",
   productToDelete: {} as any,
-  cartItems: []
+  cartItems: [],
+  fetchId:{} as any
 };
 
 export function productManipulation(
@@ -31,7 +35,8 @@ export function productManipulation(
         messagePopUp: state.messagePopUp,
         selectedProduct: state.selectedProduct,
         titlePopUp: state.titlePopUp,
-        cartItems: state.cartItems
+        cartItems: state.cartItems,
+        fetchId:state.fetchId
       };
     case "SHOW-POPUP":
       const openModal: ModalOn = action as ModalOn;
@@ -42,7 +47,8 @@ export function productManipulation(
         titlePopUp: openModal.title,
         selectedProduct: state.selectedProduct,
         productToDelete: state.productToDelete,
-        cartItems: state.cartItems
+        cartItems: state.cartItems,
+        fetchId:state.fetchId
       };
     case "HIDE-POPUP":
       return {
@@ -52,7 +58,8 @@ export function productManipulation(
         titlePopUp: state.titlePopUp,
         selectedProduct: state.selectedProduct,
         productToDelete: state.productToDelete,
-        cartItems: state.cartItems
+        cartItems: state.cartItems,
+        fetchId:state.fetchId
       };
     case "LOAD-PRODUCT":
       const loadAction: ProductDisplay = action as ProductDisplay;
@@ -63,8 +70,21 @@ export function productManipulation(
         titlePopUp: state.titlePopUp,
         productToDelete: state.productToDelete,
         showModel: state.showModel,
-        cartItems: state.cartItems
+        cartItems: state.cartItems,
+        fetchId:state.fetchId
       };
+    case FETCH_SELECTED:
+      const fetchAction :FetchSelectedProduct= action as FetchSelectedProduct;
+      return{
+        ...state,
+        fetchId:fetchAction.productID
+      }
+      case FETCH_DELETE:
+      const fetchDeleteAction :FetchSelectedProduct= action as FetchSelectedProduct;
+      return{
+        ...state,
+        fetchId:fetchDeleteAction.productID
+      }
     default:
       return state;
   }

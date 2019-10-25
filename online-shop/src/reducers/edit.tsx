@@ -8,14 +8,19 @@ import {
   ADD_NEW_PRODUCT,
   UPDATE_PRODUCT,
   SAVE_CATEGORIES,
-  SaveCategories
+  SaveCategories,
+  FETCH_UPDATE,
+  FetchUpdateProduct,
+  FETCH_ADD,
+  FetchAddNewProduct
 } from "../actions/editActions";
 
 const initialDetailsState: IStateEdit = {
   givenProduct: {} as any,
   listOfProducts: [],
   categories: [],
-  displayType: ""
+  displayType: "",
+  productID: {} as any
 };
 
 export function productEditManipulation(
@@ -29,7 +34,8 @@ export function productEditManipulation(
         givenProduct: readAction.product,
         listOfProducts: [...state.listOfProducts],
         categories: state.categories,
-        displayType: readAction.displayType
+        displayType: readAction.displayType,
+        productID: state.productID
       };
     case UPDATE_PRODUCT:
       const updateAction: UpdateProduct = action as UpdateProduct;
@@ -37,7 +43,8 @@ export function productEditManipulation(
         givenProduct: updateAction.product,
         listOfProducts: updateAction.productList,
         categories: state.categories,
-        displayType: state.displayType
+        displayType: state.displayType,
+        productID: state.productID
       };
     case ADD_NEW_PRODUCT:
       const addNewAction: AddProduct = action as AddProduct;
@@ -45,7 +52,8 @@ export function productEditManipulation(
         givenProduct: addNewAction.product,
         listOfProducts: addNewAction.productList,
         categories: state.categories,
-        displayType: state.displayType
+        displayType: state.displayType,
+        productID: state.productID
       };
     case SAVE_CATEGORIES:
       const categoriesAction: SaveCategories = action as SaveCategories;
@@ -53,8 +61,23 @@ export function productEditManipulation(
         givenProduct: state.givenProduct,
         listOfProducts: state.listOfProducts,
         categories: categoriesAction.categories,
-        displayType: state.displayType
+        displayType: state.displayType,
+        productID: state.productID
       };
+    case FETCH_UPDATE:
+      const fetchAction: FetchUpdateProduct = action as FetchUpdateProduct;
+      return {
+        ...state,
+        givenProduct: fetchAction.productUpdated,
+        productID: fetchAction.productID
+      };
+    case FETCH_ADD:
+      const fetchAddAction: FetchAddNewProduct = action as FetchAddNewProduct;
+      return {
+        ...state,
+        givenProduct: fetchAddAction.productUpdated
+      };
+
     default:
       return state;
   }

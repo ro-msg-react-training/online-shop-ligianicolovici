@@ -12,7 +12,8 @@ import { Link } from "react-router-dom";
 import {
   categoriesListSaving,
   SAVE_CATEGORIES,
-  displayProduct
+  displayProduct,
+  fetchUpdateProduct
 } from "../actions/editActions";
 import { loadProducts } from "../actions/productListActions";
 library.add(faShoppingBasket, faEraser);
@@ -25,6 +26,7 @@ interface EditDetailsProps {
   reloadProductList: (data: IProduct[]) => void;
   displayType: string;
   displayProduct: (product: IProduct, msg: string) => void;
+  fetchUpdateProduct: (id: number, productUpdated: IProduct) => void;
 }
 class DetailsManagement extends React.Component<EditDetailsProps> {
   categories: string[] = this.getCategories(this.props.productList);
@@ -90,26 +92,7 @@ class DetailsManagement extends React.Component<EditDetailsProps> {
   }
 
   updateProduct = () => {
-    let result: number = 0;
-    fetch("http://localhost:4000/products/" + this.props.product.id, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json; chartset=UTF-8",
-        Accept: "application/json"
-      },
-      body: JSON.stringify(this.productToDisplay)
-    })
-      .then(response => {
-        result = response.status;
-      })
-      .then(() => {
-        console.log(result);
-      })
-      .then(() => {
-        fetch("http://localhost:4000/products")
-          .then(response => response.json())
-          .then(data => this.props.reloadProductList(data));
-      });
+    this.props.fetchUpdateProduct(this.props.product.id, this.productToDisplay);
   };
   render() {
     let displayCategories = [...this.props.categories].map((category, key) => (
@@ -302,7 +285,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   reloadProductList: (newList: IProduct[]) =>
     dispatch(loadProducts(newList, false)),
   displayProduct: (product: IProduct, msg: string) =>
-    dispatch(displayProduct(product, msg))
+    dispatch(displayProduct(product, msg)),
+  fetchUpdateProduct: (id: number, productUpdated: IProduct) =>
+    dispatch(fetchUpdateProduct(id, productUpdated))
 });
 
 const EditDetailsInitializer = connect(

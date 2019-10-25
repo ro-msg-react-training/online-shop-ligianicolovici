@@ -12,7 +12,9 @@ import {
   loadProduct,
   deleteProduct,
   showThePopUp,
-  hideThePopUp
+  hideThePopUp,
+  fetchSelected,
+  fetchDelete
 } from "../actions/productActions";
 import { loadCart, eraseItem } from "../actions/shoppingActions";
 import { loadProducts } from "../actions/productListActions";
@@ -40,13 +42,14 @@ interface ProductDetailsProps {
   productToDelete: IProduct;
   addToCart: (product: IProduct) => void;
   deleteProduct: (product: IProduct) => void;
-
+  fetchSelected: (id: number) => void;
   showThePopUp: (message: string, title: string) => void;
   hideThePopUp: () => void;
   reloadProductList: (newList: IProduct[]) => void;
   deleteProductFromCart: (product: IProduct) => void;
   transferProductToEdit: (product: IProduct, msg: string) => void;
   crtCart: ICartProduct[];
+  fetchDelete: (id: number) => void;
 }
 
 class ProductDetails extends React.Component<ProductDetailsProps> {
@@ -57,13 +60,7 @@ class ProductDetails extends React.Component<ProductDetailsProps> {
   }
 
   callLoadProduct() {
-    let crtProduct: IProduct = {} as any;
-    fetch("http://localhost:4000/products/" + this.productID)
-      .then(response => response.json())
-      .then(result => {
-        crtProduct = result;
-      })
-      .then(() => this.props.loadProduct(crtProduct));
+    this.props.fetchSelected(this.productID);
   }
   componentDidMount() {
     this.callLoadProduct();
@@ -79,17 +76,9 @@ class ProductDetails extends React.Component<ProductDetailsProps> {
   }
 
   deleteItem(productToErase: IProduct) {
+    this.props.fetchDelete(productToErase.id);
+    this.props.hideThePopUp();
     this.props.deleteProductFromCart(productToErase);
-    return fetch("http://localhost:4000/products/" + productToErase.id, {
-      method: "delete"
-    })
-      .then(response => console.log(response.status))
-      .then(() => {
-        fetch("http://localhost:4000/products")
-          .then(response => response.json())
-          .then(data => this.props.reloadProductList(data))
-          .then(() => this.props.hideThePopUp());
-      });
   }
 
   closeModel = () => {
@@ -212,7 +201,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     dispatch(showThePopUp(message, title)),
   hideThePopUp: () => dispatch(hideThePopUp()),
   transferProductToEdit: (product: IProduct, msg: string) =>
-    dispatch(displayProduct(product, msg))
+    dispatch(displayProduct(product, msg)),
+  fetchSelected: (id: number) => dispatch(fetchSelected(id)),
+  fetchDelete: (id: number) => dispatch(fetchDelete(id))
 });
 
 const ProductDetailsInitializer = connect(

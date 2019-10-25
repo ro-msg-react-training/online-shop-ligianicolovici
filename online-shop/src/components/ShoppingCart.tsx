@@ -17,7 +17,8 @@ import {
   checkOut,
   quantityUp,
   quantityDown,
-  hideThePopUp
+  hideThePopUp,
+  fetchOrder
 } from "../actions/shoppingActions";
 import { connect } from "react-redux";
 import defaultImg from "../default.jpg";
@@ -44,6 +45,12 @@ export interface CartProps {
   quantityUp: (product: IProduct) => void;
   quantityDown: (product: IProduct) => void;
   hideThePopUp: () => void;
+  fetchOrder: (
+    productsInCart: ICartProduct[],
+    message: string,
+    title: string,
+    json: string
+  ) => void;
 }
 
 class ShoppingCart extends React.Component<CartProps> {
@@ -73,21 +80,12 @@ class ShoppingCart extends React.Component<CartProps> {
   )}}`;
 
   submitOrder = () => {
-    let result: number = 0;
-    return fetch("http://localhost:4000/orders/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: this.json
-    })
-      .then(response => {
-        result = response.status;
-      })
-      .then(() => {
-        if (result === 201) {
-          this.popUpMsg = "Order succesfully placed";
-        }
-        this.props.checkOut(this.props.data, this.popUpMsg, this.popUpTitle);
-      });
+    this.props.fetchOrder(
+      this.props.data,
+      this.popUpMsg,
+      this.popUpTitle,
+      this.json
+    );
   };
   closeModel = () => {
     this.props.hideThePopUp();
@@ -236,7 +234,13 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   eraseItem: (product: IProduct) => dispatch(eraseItem(product)),
   quantityUp: (product: IProduct) => dispatch(quantityUp(product)),
   quantityDown: (product: IProduct) => dispatch(quantityDown(product)),
-  hideThePopUp: () => dispatch(hideThePopUp())
+  hideThePopUp: () => dispatch(hideThePopUp()),
+  fetchOrder: (
+    productsInCart: ICartProduct[],
+    message: string,
+    title: string,
+    json: string
+  ) => dispatch(fetchOrder(productsInCart, message, title, json))
 });
 
 const ShoppingCartInitializer = connect(

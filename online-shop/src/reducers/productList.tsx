@@ -1,7 +1,9 @@
 import { IProduct } from "../model/Interfaces";
 import {
   LOAD_PRODUCTS,
-  LoadTheProductList
+  LoadTheProductList,
+  FETCH_PRODUCTS,
+  ListActions
 } from "../actions/productListActions";
 export interface ProductListState {
   data: IProduct[];
@@ -14,7 +16,7 @@ const initialState: ProductListState = {
 
 export function productListReducer(
   state: ProductListState = initialState,
-  action: LoadTheProductList
+  action: ListActions
 ): ProductListState {
   switch (action.type) {
     case LOAD_PRODUCTS:
@@ -22,6 +24,10 @@ export function productListReducer(
         data: [...action.data],
         isLoading: action.isLoading,
       };
+    case FETCH_PRODUCTS:
+      return{
+        ...state
+      }
     default:
       return state;
   }

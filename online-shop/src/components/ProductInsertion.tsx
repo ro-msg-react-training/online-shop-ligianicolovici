@@ -9,18 +9,23 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import "../App.sass";
 import { Link } from "react-router-dom";
-import { categoriesListSaving, displayProduct } from "../actions/editActions";
+import {
+  categoriesListSaving,
+  displayProduct,
+  fetchAddNewProduct
+} from "../actions/editActions";
 import { loadProducts } from "../actions/productListActions";
 library.add(faShoppingBasket, faEraser);
 
-interface EditDetailsProps {
+interface AddNewProductProps {
   product: IProduct;
   productList: IProduct[];
   saveCategories: (categories: string[]) => void;
   categories: string[];
   reloadProductList: (data: IProduct[]) => void;
+  fetchAddNewProduct: (productUpdated: IProduct) => void;
 }
-class NewProduct extends React.Component<EditDetailsProps> {
+class NewProduct extends React.Component<AddNewProductProps> {
   categories: string[] = this.getCategories(this.props.productList);
   updatedProduct: IProduct = {} as any;
   productToDisplay: IProduct = {} as any;
@@ -65,31 +70,12 @@ class NewProduct extends React.Component<EditDetailsProps> {
   createNewProduct = (id: number): IProduct => {
     return this.productToDisplay;
   };
-  constructor(props: EditDetailsProps) {
+  constructor(props: AddNewProductProps) {
     super(props);
   }
 
   addProduct = () => {
-    let result: number = 0;
-    fetch("http://localhost:4000/products/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; chartset=UTF-8",
-        Accept: "application/json"
-      },
-      body: JSON.stringify(this.productToDisplay)
-    })
-      .then(response => {
-        result = response.status;
-      })
-      .then(() => {
-        console.log(result);
-      })
-      .then(() => {
-        fetch("http://localhost:4000/products")
-          .then(response => response.json())
-          .then(data => this.props.reloadProductList(data));
-      });
+    this.props.fetchAddNewProduct(this.productToDisplay);
   };
   render() {
     let displayCategories = [...this.props.categories].map((category, key) => (
@@ -278,7 +264,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   reloadProductList: (newList: IProduct[]) =>
     dispatch(loadProducts(newList, false)),
   displayProduct: (product: IProduct, msg: string) =>
-    dispatch(displayProduct(product, msg))
+    dispatch(displayProduct(product, msg)),
+  fetchAddNewProduct: (productUpdated: IProduct) =>
+    dispatch(fetchAddNewProduct(productUpdated))
 });
 
 const AddProductInitializer = connect(
