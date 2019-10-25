@@ -1,99 +1,111 @@
 import React from "react";
 import "../productModeling/shoppingcart.css";
 import {
-  IPropsCart,
-  IStateCart,
   IProduct,
   ICartProduct,
-  IOrder
+  IOrder,
+  ProductImagesUrls
 } from "../model/Interfaces";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faShoppingCart, faShower } from "@fortawesome/free-solid-svg-icons";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { ModalPopUp } from "./ModalPopUp";
+import { AppState } from "../reducers/combine";
+import { Dispatch } from "redux";
+import {
+  eraseItem,
+  checkOut,
+  quantityUp,
+  quantityDown,
+  hideThePopUp
+} from "../actions/shoppingActions";
+import { connect } from "react-redux";
+import defaultImg from "../default.jpg";
 
 library.add(faShoppingCart);
-export class ShoppingCart extends React.Component<IPropsCart, IStateCart> {
-  json: string;
-  orderItem: IOrder[];
+
+export interface LocalStateshop {
+  onDeleteItemFromShopping?: any;
+}
+export interface CartProps {
+  data: ICartProduct[];
+  onDeleteItemFromShopping?: any;
+  hasProducts: boolean;
+  showModal: boolean;
+  response: number;
+  modalText: string;
+  modalTitle: string;
+  checkOut: (
+    productsInCart: ICartProduct[],
+    meesage: string,
+    title: string
+  ) => void;
+  eraseItem: (product: IProduct) => void;
+  quantityUp: (product: IProduct) => void;
+  quantityDown: (product: IProduct) => void;
+  hideThePopUp: () => void;
+}
+
+class ShoppingCart extends React.Component<CartProps> {
   popUpMsg: string = "Error";
   popUpTitle: string = "Order Status";
-  constructor(props: IPropsCart) {
-    super(props);
-    this.state = {
-      cartProducts: this.props.data,
-      hasProducts: false,
-      responseFromBackend: 0,
-      showModal: false
-    };
-    this.orderItem = this.createOrder();
-    this.json = `{"customer": "doej","products": ${JSON.stringify(
-      this.orderItem
-    )}}`;
-  }
 
-  submitOrder() {
-    fetch("http://localhost:4000/orders/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: this.json
-    }).then(response => {
-      this.setState({ responseFromBackend: response.status });
-      this.orderResponse(this.state.responseFromBackend);
-    });
-  }
-
-  orderResponse = (data: any) => {
-    if (data === 201) {
-      this.popUpMsg = "Order placed succefully";
-      this.setState({
-        showModal: true
-      });
-    } else if (data === 401) {
-      this.popUpMsg = "Something went wrong, please try again :(";
-      this.setState({
-        showModal: true
-      });
-    }
-  };
-  closeModal = () => {
-    if (this.state.showModal === true) {
-      this.setState({
-        showModal: false
-      });
-    }
-  };
-
-  createOrder = () => {
+  createOrder = (crtCartItems: ICartProduct[]) => {
     let i: number;
     let productsToCheckout: IOrder[] = [];
     let itemReadyForCheckout: IOrder = {} as any;
     let crtProductId: number;
     let crtProductQuantity: number;
-    for (i = 0; i < this.state.cartProducts.length; i++) {
-      crtProductId = this.state.cartProducts[i].product.id;
-      crtProductQuantity = this.state.cartProducts[i].quantity;
+
+    for (i = 0; i < crtCartItems.length; i++) {
+      crtProductId = crtCartItems[i].product.id;
+      crtProductQuantity = crtCartItems[i].quantity;
       itemReadyForCheckout.productId = crtProductId;
       itemReadyForCheckout.quantity = crtProductQuantity;
       productsToCheckout.push(itemReadyForCheckout);
     }
     return productsToCheckout;
   };
+
+  orderItem: IOrder[] = this.createOrder([...this.props.data]);
+  json: string = `{"customer": "doej","products": ${JSON.stringify(
+    this.orderItem
+  )}}`;
+
+  submitOrder = () => {
+    let result: number = 0;
+    return fetch("http://localhost:4000/orders/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: this.json
+    })
+      .then(response => {
+        result = response.status;
+      })
+      .then(() => {
+        if (result === 201) {
+          this.popUpMsg = "Order succesfully placed";
+        }
+        this.props.checkOut(this.props.data, this.popUpMsg, this.popUpTitle);
+      });
+  };
+  closeModel = () => {
+    this.props.hideThePopUp();
+  };
   getTotalSum = () => {
     let i: number;
     let crtQuantity: number;
     let crtPrice: number;
     let totalSum: number = 0;
-    for (i = 0; i < this.state.cartProducts.length; i++) {
-      crtQuantity = this.state.cartProducts[i].quantity;
-      crtPrice = this.state.cartProducts[i].product.price;
+    for (i = 0; i < this.props.data.length; i++) {
+      crtQuantity = this.props.data[i].quantity;
+      crtPrice = this.props.data[i].product.price;
       totalSum = totalSum + crtQuantity * crtPrice;
     }
     return totalSum;
   };
   calculateTotalSumAndCheckout = () => {
-    if (this.state.hasProducts === true) {
-      console.log("este");
+    if (this.props.hasProducts === true) {
       return (
         <div className="checkoutSum">
           <div className="total-Sum">
@@ -104,7 +116,7 @@ export class ShoppingCart extends React.Component<IPropsCart, IStateCart> {
               className="button is-danger"
               id="showModal"
               onClick={() => {
-                if(this.getTotalSum()>0){
+                if (this.getTotalSum() > 0) {
                   this.submitOrder();
                 }
               }}
@@ -116,65 +128,22 @@ export class ShoppingCart extends React.Component<IPropsCart, IStateCart> {
       );
     }
   };
-  increaseQuantity = (productToIncreaseQ: IProduct) => {
-    let i: number;
-    let crtQuantity: number = 0;
-    for (i = 0; i < this.state.cartProducts.length; i++) {
-      if (this.state.cartProducts[i].product.id === productToIncreaseQ.id) {
-        crtQuantity = this.state.cartProducts[i].quantity;
-        crtQuantity++;
-        this.state.cartProducts[i].quantity = crtQuantity;
-        this.setState({
-          cartProducts: this.state.cartProducts
-        });
-      }
-    }
-  };
-  decreaseQuantity = (productToDecreaseQ: IProduct) => {
-    let i: number;
-    let crtQuantity: number = 0;
-    for (i = 0; i < this.state.cartProducts.length; i++) {
-      if (this.state.cartProducts[i].product.id === productToDecreaseQ.id) {
-        crtQuantity = this.state.cartProducts[i].quantity;
-        crtQuantity--;
-        if (crtQuantity === 0) {
-          this.deleteItemFromCart(productToDecreaseQ);
-          break;
-        }
-        this.state.cartProducts[i].quantity = crtQuantity;
-        this.setState({
-          cartProducts: this.state.cartProducts
-        });
-      }
-    }
-  };
-  deleteItemFromCart = (productToDelete: IProduct) => {
-    let i: number;
-    let cartAfterDelete: ICartProduct[] = [];
-    for (i = 0; i < this.state.cartProducts.length; i++) {
-      if (this.state.cartProducts[i].product.id != productToDelete.id) {
-        cartAfterDelete.push(this.state.cartProducts[i]);
-      }
-    }
-    this.setState({
-      cartProducts: cartAfterDelete
-    });
-    this.props.onDeleteItemFromShopping(productToDelete);
-  };
+
   render() {
     let productsFromCart: any;
-    if (this.state.cartProducts.length > 0) {
-      if (this.state.hasProducts === false) {
-        console.log("ai produse");
-        this.setState({
-          hasProducts: true
-        });
-      }
-      productsFromCart = this.state.cartProducts.map((productt, key) => (
+    if (this.props.data.length > 0) {
+      productsFromCart = this.props.data.map((productt, key) => (
         <div id="cartItem">
           <div className="column">
             <div id="cartItem-img">
-              <img src={productt.product.image} id="product-img"></img>
+              <img
+                src={
+                  ProductImagesUrls[productt.product.id]
+                    ? ProductImagesUrls[productt.product.id].image
+                    : defaultImg
+                }
+                id="product-img"
+              ></img>
             </div>
           </div>
           <div className="column">
@@ -199,7 +168,7 @@ export class ShoppingCart extends React.Component<IPropsCart, IStateCart> {
                 <div className="column">
                   <a
                     className="button is-primary is-outlined"
-                    onClick={() => this.decreaseQuantity(productt.product)}
+                    onClick={() => this.props.quantityDown(productt.product)}
                   >
                     -
                   </a>
@@ -210,7 +179,7 @@ export class ShoppingCart extends React.Component<IPropsCart, IStateCart> {
 
                   <a
                     className="button is-primary is-outlined"
-                    onClick={() => this.increaseQuantity(productt.product)}
+                    onClick={() => this.props.quantityUp(productt.product)}
                   >
                     +
                   </a>
@@ -219,7 +188,7 @@ export class ShoppingCart extends React.Component<IPropsCart, IStateCart> {
               <div id="deleteItem">
                 <span
                   className="button is-danger"
-                  onClick={() => this.deleteItemFromCart(productt.product)}
+                  onClick={() => this.props.eraseItem(productt.product)}
                 >
                   Delete item
                 </span>
@@ -240,14 +209,39 @@ export class ShoppingCart extends React.Component<IPropsCart, IStateCart> {
           {this.calculateTotalSumAndCheckout()}
         </div>
         <ModalPopUp
-          data={this.popUpMsg}
-          title={this.popUpTitle}
-          active={this.state.showModal}
-          onClosing={this.closeModal.bind(this)}
+          data={this.props.modalText}
+          title={this.props.modalTitle}
+          active={this.props.showModal}
+          onClosing={this.closeModel.bind(this)}
           productToDelete={{} as any}
         />
       </div>
     );
   }
 }
-export default ShoppingCart;
+
+const mapStateToProps = (state: AppState, myOwnState: LocalStateshop) => ({
+  onDeleteItemFromShopping: myOwnState.onDeleteItemFromShopping,
+  hasProducts: state.shoppingReducer.hasProducts,
+  data: state.shoppingReducer.cartProducts,
+  showModal: state.shoppingReducer.showModal,
+  response: state.shoppingReducer.responseFromBackend,
+  modalText: state.shoppingReducer.modalText,
+  modalTitle: state.shoppingReducer.modalTitle
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  checkOut: (productsInCart: ICartProduct[], message: string, title: string) =>
+    dispatch(checkOut(productsInCart, message, title)),
+  eraseItem: (product: IProduct) => dispatch(eraseItem(product)),
+  quantityUp: (product: IProduct) => dispatch(quantityUp(product)),
+  quantityDown: (product: IProduct) => dispatch(quantityDown(product)),
+  hideThePopUp: () => dispatch(hideThePopUp())
+});
+
+const ShoppingCartInitializer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ShoppingCart);
+
+export default ShoppingCartInitializer;

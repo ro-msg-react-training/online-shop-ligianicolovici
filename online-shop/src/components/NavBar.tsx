@@ -1,14 +1,34 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
+import { Link, Redirect } from "react-router-dom";
 import iconPage from "../icon.png";
 import "../productModeling/navBar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { library, icon } from "@fortawesome/fontawesome-svg-core";
-import { faCamera, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faCamera,
+  faShoppingCart,
+  faPlus
+} from "@fortawesome/free-solid-svg-icons";
+import { Dispatch } from "redux";
+import { connect } from "react-redux";
+import { displayProduct } from "../actions/editActions";
+import { IProduct } from "../model/Interfaces";
+import { AppState } from "../reducers/combine";
 
-library.add(faCamera, faShoppingCart);
+library.add(faCamera, faShoppingCart, faPlus);
+interface NavProps {
+  displayProduct: (product: IProduct, msg: string) => void;
+}
 
-export default class NavBar extends React.Component {
+class NavBar extends React.Component<NavProps> {
+  defaultProduct: IProduct = {
+    id: 0,
+    name: "",
+    price: 0,
+    category: "",
+    description: "",
+    image: ""
+  };
   render() {
     return (
       <div className="navDiv">
@@ -22,6 +42,26 @@ export default class NavBar extends React.Component {
                 </a>
               </div>
             </Link>
+          </div>
+          <div className="navbar-item">
+            <div className="field is-grouped">
+              <p className="control">
+                <Link to="/add">
+                  <a
+                    className="button is-danger"
+                    onClick={() => {
+                      this.props.displayProduct(this.defaultProduct, "add");
+                      console.log("addp");
+                    }}
+                  >
+                    <span className="icon">
+                      <FontAwesomeIcon icon="plus" color="#ddd" />
+                    </span>
+                    <span>Add</span>
+                  </a>
+                </Link>
+              </p>
+            </div>
           </div>
           <div className="navbar-end">
             <div className="navbar-item">
@@ -44,3 +84,14 @@ export default class NavBar extends React.Component {
     );
   }
 }
+const mapStateToProps = (state: AppState) => ({});
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  displayProduct: (product: IProduct, msg: string) =>
+    dispatch(displayProduct(product, msg))
+});
+
+const NavInitializer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NavBar);
+export default NavInitializer;

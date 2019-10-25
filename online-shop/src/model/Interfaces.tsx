@@ -6,9 +6,9 @@ export interface IProduct {
   price: number;
   description: string;
 }
-export interface ICartProduct{
-  product:IProduct;
-  quantity:number
+export interface ICartProduct {
+  product: IProduct;
+  quantity: number;
 }
 
 // ----- App ----- //
@@ -16,7 +16,7 @@ export interface IPropsApp {
   data?: any;
 }
 export interface IStateApp {
-  itemsCart:ICartProduct[];
+  itemsCart: ICartProduct[];
   products: IProduct[];
 }
 export interface ArrayOfProductImages {
@@ -292,17 +292,20 @@ export interface IStateProducts {
 // ----- ShoppingCart ----- //
 export interface IPropsCart {
   data: ICartProduct[];
-  onDeleteItemFromShopping:any;
+  onDeleteItemFromShopping: any;
 }
 export interface IStateCart {
   cartProducts: ICartProduct[];
-  hasProducts:boolean;
-  responseFromBackend:number;
-  showModal:boolean;
+  hasProducts: boolean;
+  responseFromBackend: number;
+  showModal: boolean;
+  orderItem: IOrder[];
+  modalTitle: string;
+  modalText: string;
 }
-export interface IOrder{
-  productId:number;
-  quantity:number;
+export interface IOrder {
+  productId: number;
+  quantity: number;
 }
 // ----- ProductDetails ----- //
 export interface IPropsDetails {
@@ -310,27 +313,33 @@ export interface IPropsDetails {
   match?: any;
   onAddProduct?: any;
   onDeleteProduct?: any;
-  
 }
 export interface IStateDetails {
   dataToExport: IProduct;
   selectedProduct: IProduct;
-  showModel:boolean;
-  messagePopUp:string;
-  titlePopUp:string;
-  productToDelete:IProduct;
+  showModel: boolean;
+  messagePopUp: string;
+  titlePopUp: string;
+  cartItems: ICartProduct[];
+  productToDelete: IProduct;
 }
 // --------- PopUp --------- //
-export interface IPropsModal{
-  title:String;
+export interface IPropsModal {
+  title: String;
   data?: String;
-  active:boolean;
-  onClosing:any;
-  onDeleteProduct?:any;
-  productToDelete:IProduct
+  active: boolean;
+  onClosing: any;
+  onDeleteProduct?: any;
+  productToDelete: IProduct;
 }
-export interface IStateModal{
+export interface IStateModal {
   message?: String;
-  titlePopUp?:String;
-  actived:boolean;
+  titlePopUp?: String;
+  actived: boolean;
+}
+export interface IStateEdit {
+  givenProduct: IProduct;
+  listOfProducts: IProduct[];
+  categories: string[];
+  displayType: string;
 }
