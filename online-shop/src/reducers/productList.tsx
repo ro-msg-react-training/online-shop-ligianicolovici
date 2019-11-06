@@ -2,7 +2,7 @@ import { IProduct } from "../model/Interfaces";
 import {
   LOAD_PRODUCTS,
   LoadTheProductList,
-  FETCH_PRODUCTS,
+  GET_PRODUCT_LIST,
   ListActions
 } from "../actions/productListActions";
 export interface ProductListState {
@@ -22,12 +22,12 @@ export function productListReducer(
     case LOAD_PRODUCTS:
       return {
         data: [...action.data],
-        isLoading: action.isLoading,
+        isLoading: action.isLoading
       };
-    case FETCH_PRODUCTS:
-      return{
+    case GET_PRODUCT_LIST:
+      return {
         ...state
-      }
+      };
     default:
       return state;
   }

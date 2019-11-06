@@ -35,7 +35,7 @@ export class ModalPopUp extends React.Component<IPropsModal> {
           id="closeModel"
           onClick={() => this.props.onClosing()}
         >
-          Cancel
+          Ok
         </button>
       );
     }

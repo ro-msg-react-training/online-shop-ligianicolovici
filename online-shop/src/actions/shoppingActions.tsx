@@ -5,7 +5,7 @@ export const DECREASE_QUANTITY = "DECREASE-QUANTITY";
 export const CHECK_OUT = "CHECK-OUT";
 export const LOAD_CART = "LOAD-CART";
 export const HIDE_POPUP = "HIDE-POPUP";
-export const FETCH_ORDER = "FETCH-ORDER";
+export const SEND_ORDER = "SEND-ORDER";
 
 export interface EraseItem {
   type: typeof DELETE_PRODUCT_FROM_CART;
@@ -35,12 +35,12 @@ export interface ModalOff {
   type: string;
 }
 
-export interface FetchOrder{
-   type: typeof FETCH_ORDER,
-   modalTitle:string,
-   modalText:string,
-   cartProducts:ICartProduct[],
-   json:string;
+export interface FetchOrder {
+  type: typeof SEND_ORDER;
+  modalTitle: string;
+  modalText: string;
+  cartProducts: ICartProduct[];
+  json: string;
 }
 
 export function hideThePopUp(): CartActions {
@@ -86,14 +86,19 @@ export function quantityDown(product: IProduct): CartActions {
     product: product
   };
 }
-export function fetchOrder(cartItems:ICartProduct[],msg:string,title:string,json:string):CartActions{
-  return{
-    type:FETCH_ORDER,
-    cartProducts:cartItems,
-    modalText:msg,
-    modalTitle:title,
-    json:json
-  }
+export function fetchOrder(
+  cartItems: ICartProduct[],
+  msg: string,
+  title: string,
+  json: string
+): CartActions {
+  return {
+    type: SEND_ORDER,
+    cartProducts: cartItems,
+    modalText: msg,
+    modalTitle: title,
+    json: json
+  };
 }
 export type CartActions =
   | EraseItem

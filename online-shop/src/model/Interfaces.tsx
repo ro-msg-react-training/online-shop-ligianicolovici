@@ -345,4 +345,11 @@ export interface IStateEdit {
   categories: string[];
   displayType: string;
   productID: number;
+  defaultProduct: IProduct,
+  productToDisplay: IProduct,
+  // updatedProduct: IProduct
+}
+export interface ISales{
+  category:string,
+  sales: number
 }

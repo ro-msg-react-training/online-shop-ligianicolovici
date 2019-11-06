@@ -1,8 +1,19 @@
 import { all, takeLatest, put, call } from "redux-saga/effects";
-import { FetchSelectedProduct } from "../actions/productActions";
+import {
+  FetchSelectedProduct,
+  GET_SELECTED_PRODUCT,
+  DELETE_CURRENT_PRODUCT
+} from "../actions/productActions";
 import { ICartProduct } from "../model/Interfaces";
-import { FetchOrder } from "../actions/shoppingActions";
-import { FetchUpdateProduct, FetchAddNewProduct } from "../actions/editActions";
+import { FetchOrder, SEND_ORDER } from "../actions/shoppingActions";
+import {
+  FetchUpdateProduct,
+  FetchAddNewProduct,
+  UPDATE_CURRENT_PRODUCT,
+  CREATE_NEW_PRODUCT
+} from "../actions/editActions";
+import { GET_PRODUCT_LIST } from "../actions/productListActions";
+import { GET_SALES } from "../actions/highChartActions";
 
 function* fetchProductList() {
   const data = yield fetch("http://localhost:4000/products", { method: "GET" })
@@ -105,13 +116,23 @@ function* fetchAddNewProduct(action: FetchAddNewProduct) {
   yield put({ type: "LOAD-PRODUCTS", data });
 }
 
+function* fetchSales() {
+  const data = yield fetch("http://localhost:4000/sales", { method: "GET" })
+    .then(response => response.json())
+    .then(result => {
+      return result;
+    });
+  yield put({ type: "LOAD-SALES", data });
+}
+
 function* actionWatcher() {
-  yield takeLatest("FETCH-PRODUCTS", fetchProductList);
-  yield takeLatest("FETCH-SELECTED", fetchProductDetails);
-  yield takeLatest("FETCH-DELETE", fetchDeleteDetailsProduct);
-  yield takeLatest("FETCH-ORDER", fetchTheOrder);
-  yield takeLatest("FETCH-UPDATE", fetchUpdatedProduct);
-  yield takeLatest("FETCH-ADD", fetchAddNewProduct);
+  yield takeLatest(GET_PRODUCT_LIST, fetchProductList);
+  yield takeLatest(GET_SELECTED_PRODUCT, fetchProductDetails);
+  yield takeLatest(DELETE_CURRENT_PRODUCT, fetchDeleteDetailsProduct);
+  yield takeLatest(SEND_ORDER, fetchTheOrder);
+  yield takeLatest(UPDATE_CURRENT_PRODUCT, fetchUpdatedProduct);
+  yield takeLatest(CREATE_NEW_PRODUCT, fetchAddNewProduct);
+  yield takeLatest(GET_SALES, fetchSales);
 }
 
 export default function* rootSaga() {

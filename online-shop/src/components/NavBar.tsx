@@ -7,7 +7,8 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCamera,
   faShoppingCart,
-  faPlus
+  faPlus,
+  faChartPie
 } from "@fortawesome/free-solid-svg-icons";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
@@ -15,7 +16,7 @@ import { displayProduct } from "../actions/editActions";
 import { IProduct } from "../model/Interfaces";
 import { AppState } from "../reducers/combine";
 
-library.add(faCamera, faShoppingCart, faPlus);
+library.add(faCamera, faShoppingCart, faPlus, faChartPie);
 interface NavProps {
   displayProduct: (product: IProduct, msg: string) => void;
 }
@@ -51,13 +52,26 @@ class NavBar extends React.Component<NavProps> {
                     className="button is-danger"
                     onClick={() => {
                       this.props.displayProduct(this.defaultProduct, "add");
-                      console.log("addp");
                     }}
                   >
                     <span className="icon">
                       <FontAwesomeIcon icon="plus" color="#ddd" />
                     </span>
                     <span>Add</span>
+                  </a>
+                </Link>
+              </p>
+            </div>
+          </div>
+          <div className="navbar-item">
+            <div className="field is-grouped">
+              <p className="control">
+                <Link to="/chart">
+                  <a className="button is-worning">
+                    <span className="icon">
+                      <FontAwesomeIcon icon="chart-pie" color="#ddd" />
+                    </span>
+                    <span>Highcharts</span>
                   </a>
                 </Link>
               </p>

@@ -1,9 +1,4 @@
-import {
-  IProduct,
-  ICartProduct,
-  IStateCart
-} from "../model/Interfaces";
-
+import { IProduct, ICartProduct, IStateCart } from "../model/Interfaces";
 import {
   CartActions,
   LoadCart,
@@ -11,6 +6,13 @@ import {
   QuantityDown,
   EraseItem,
   CheckOut,
+  SEND_ORDER,
+  HIDE_POPUP,
+  LOAD_CART,
+  INCREASE_QUANTITY,
+  DECREASE_QUANTITY,
+  DELETE_PRODUCT_FROM_CART,
+  CHECK_OUT,
   FetchOrder
 } from "../actions/shoppingActions";
 
@@ -20,9 +22,9 @@ const initialShoppingState: IStateCart = {
   hasProducts: false,
   responseFromBackend: 0,
   showModal: false,
-  modalTitle: "default",
-  modalText: "default",
-  json:""
+  modalTitle: "Order Status",
+  modalText: "Error",
+  json: ""
 };
 
 export function shoppingCartManipulation(
@@ -30,7 +32,7 @@ export function shoppingCartManipulation(
   action: CartActions
 ): IStateCart {
   switch (action.type) {
-    case "HIDE-POPUP":
+    case HIDE_POPUP:
       return {
         cartProducts: state.cartProducts,
         hasProducts: true,
@@ -39,9 +41,9 @@ export function shoppingCartManipulation(
         orderItem: state.orderItem,
         modalText: state.modalText,
         modalTitle: state.modalTitle,
-        json:state.json
+        json: state.json
       };
-    case "LOAD-CART":
+    case LOAD_CART:
       const loadAction: LoadCart = action as LoadCart;
       return {
         cartProducts: insertInCart(loadAction.product, [...state.cartProducts]),
@@ -51,9 +53,9 @@ export function shoppingCartManipulation(
         orderItem: state.orderItem,
         modalText: state.modalText,
         modalTitle: state.modalTitle,
-        json:state.json
+        json: state.json
       };
-    case "INCREASE-QUANTITY":
+    case INCREASE_QUANTITY:
       const addAction: QuantityUP = action as QuantityUP;
       return {
         cartProducts: increaseQuantity(addAction.product, state.cartProducts),
@@ -63,9 +65,9 @@ export function shoppingCartManipulation(
         orderItem: state.orderItem,
         modalText: state.modalText,
         modalTitle: state.modalTitle,
-        json:state.json
+        json: state.json
       };
-    case "DECREASE-QUANTITY":
+    case DECREASE_QUANTITY:
       const eraseAction: QuantityDown = action as QuantityDown;
       return {
         cartProducts: decreaseQuantity(eraseAction.product, state.cartProducts),
@@ -75,9 +77,9 @@ export function shoppingCartManipulation(
         orderItem: state.orderItem,
         modalText: state.modalText,
         modalTitle: state.modalTitle,
-        json:state.json
+        json: state.json
       };
-    case "DELETE-PRODUCT-FROM-CART":
+    case DELETE_PRODUCT_FROM_CART:
       const deleteAction: EraseItem = action as EraseItem;
       return {
         cartProducts: deleteItemFromCart(deleteAction.product, [
@@ -89,10 +91,10 @@ export function shoppingCartManipulation(
         orderItem: state.orderItem,
         modalText: state.modalText,
         modalTitle: state.modalTitle,
-        json:state.json
+        json: state.json
       };
 
-    case "CHECK-OUT":
+    case CHECK_OUT:
       const checkOutAction: CheckOut = action as CheckOut;
       return {
         cartProducts: clearCart([...checkOutAction.cartProducts]),
@@ -102,17 +104,18 @@ export function shoppingCartManipulation(
         orderItem: state.orderItem,
         modalText: checkOutAction.modalText,
         modalTitle: checkOutAction.modalTitle,
-        json:state.json
+        json: state.json
       };
-      case "FETCH-ORDER":
-          const fetchAction: FetchOrder = action as FetchOrder;
-          return {
-            ...state,
-            cartProducts:fetchAction.cartProducts,
-            modalText:fetchAction.modalText,
-            modalTitle:fetchAction.modalTitle,
-            json:fetchAction.json
-          };
+    case SEND_ORDER:
+      const fetchAction: FetchOrder = action as FetchOrder;
+      return {
+        ...state,
+        cartProducts: fetchAction.cartProducts,
+        modalText: fetchAction.modalText,
+        modalTitle: fetchAction.modalTitle,
+        json: fetchAction.json,
+        showModal: true
+      };
 
     default:
       return state;

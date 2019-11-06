@@ -4,8 +4,8 @@ export const DELETE_PRODUCT = "DELETE-PRODUCT";
 export const SHOW_POPUP = "SHOW-POPUP";
 export const HIDE_POPUP = "HIDE-POPUP";
 export const LOAD_PRODUCT = "LOAD-PRODUCT";
-export const FETCH_SELECTED= "FETCH-SELECTED";
-export const FETCH_DELETE= "FETCH-DELETE";
+export const GET_SELECTED_PRODUCT = "GET-SELECTED-PRODUCT";
+export const DELETE_CURRENT_PRODUCT = "DELETE-CURRENT-PRODUCT";
 
 export interface ProductOperations {
   type: typeof DELETE_PRODUCT;
@@ -21,13 +21,12 @@ export interface ModalOn {
   title: string;
 }
 export interface FetchSelectedProduct {
-  type:string;
-  productID:number;
+  type: string;
+  productID: number;
 }
-export interface ModalOff{
-  type:string;
+export interface ModalOff {
+  type: string;
 }
-
 
 export function loadProduct(data: IProduct): DetailsActions {
   return {
@@ -61,22 +60,22 @@ export function hideThePopUp(): DetailsActions {
   };
 }
 
-export function fetchSelected(id:number):FetchSelectedProduct{
-    return{
-      type:FETCH_SELECTED,
-      productID:id
-    }
+export function fetchSelected(id: number): FetchSelectedProduct {
+  return {
+    type: GET_SELECTED_PRODUCT,
+    productID: id
+  };
 }
 
-export function fetchDelete(id:number):FetchSelectedProduct{
-  return{
-    type:FETCH_DELETE,
-    productID:id
-  }
+export function fetchDelete(id: number): FetchSelectedProduct {
+  return {
+    type: DELETE_CURRENT_PRODUCT,
+    productID: id
+  };
 }
 export type DetailsActions =
   | ProductOperations
   | ModalOn
   | ProductDisplay
   | ModalOff
-  |FetchSelectedProduct;
+  | FetchSelectedProduct;

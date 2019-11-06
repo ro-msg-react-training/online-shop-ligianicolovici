@@ -4,9 +4,13 @@ import {
   ProductOperations,
   ProductDisplay,
   ModalOn,
-  FETCH_SELECTED,
+  GET_SELECTED_PRODUCT,
   FetchSelectedProduct,
-  FETCH_DELETE
+  DELETE_PRODUCT,
+  SHOW_POPUP,
+  LOAD_PRODUCT,
+  HIDE_POPUP,
+  DELETE_CURRENT_PRODUCT
 } from "../actions/productActions";
 
 const initialDetailsState: IStateDetails = {
@@ -17,7 +21,7 @@ const initialDetailsState: IStateDetails = {
   titlePopUp: "",
   productToDelete: {} as any,
   cartItems: [],
-  fetchId:{} as any
+  fetchId: {} as any
 };
 
 export function productManipulation(
@@ -25,20 +29,21 @@ export function productManipulation(
   action: DetailsActions
 ): IStateDetails {
   switch (action.type) {
-    case "DELETE-PRODUCT":
+    case DELETE_PRODUCT:
       const deleteAction: ProductOperations = action as ProductOperations;
-
-      return {
-        dataToExport: state.dataToExport,
-        showModel: state.showModel,
-        productToDelete: deleteAction.product,
-        messagePopUp: state.messagePopUp,
-        selectedProduct: state.selectedProduct,
-        titlePopUp: state.titlePopUp,
-        cartItems: state.cartItems,
-        fetchId:state.fetchId
-      };
-    case "SHOW-POPUP":
+      {
+        return {
+          dataToExport: state.dataToExport,
+          showModel: state.showModel,
+          productToDelete: deleteAction.product,
+          messagePopUp: state.messagePopUp,
+          selectedProduct: state.selectedProduct,
+          titlePopUp: state.titlePopUp,
+          cartItems: state.cartItems,
+          fetchId: state.fetchId
+        };
+      }
+    case SHOW_POPUP:
       const openModal: ModalOn = action as ModalOn;
       return {
         showModel: true,
@@ -48,9 +53,9 @@ export function productManipulation(
         selectedProduct: state.selectedProduct,
         productToDelete: state.productToDelete,
         cartItems: state.cartItems,
-        fetchId:state.fetchId
+        fetchId: state.fetchId
       };
-    case "HIDE-POPUP":
+    case HIDE_POPUP:
       return {
         showModel: false,
         dataToExport: state.dataToExport,
@@ -59,9 +64,9 @@ export function productManipulation(
         selectedProduct: state.selectedProduct,
         productToDelete: state.productToDelete,
         cartItems: state.cartItems,
-        fetchId:state.fetchId
+        fetchId: state.fetchId
       };
-    case "LOAD-PRODUCT":
+    case LOAD_PRODUCT:
       const loadAction: ProductDisplay = action as ProductDisplay;
       return {
         selectedProduct: loadAction.product,
@@ -71,20 +76,20 @@ export function productManipulation(
         productToDelete: state.productToDelete,
         showModel: state.showModel,
         cartItems: state.cartItems,
-        fetchId:state.fetchId
+        fetchId: state.fetchId
       };
-    case FETCH_SELECTED:
-      const fetchAction :FetchSelectedProduct= action as FetchSelectedProduct;
-      return{
+    case GET_SELECTED_PRODUCT:
+      const fetchAction: FetchSelectedProduct = action as FetchSelectedProduct;
+      return {
         ...state,
-        fetchId:fetchAction.productID
-      }
-      case FETCH_DELETE:
-      const fetchDeleteAction :FetchSelectedProduct= action as FetchSelectedProduct;
-      return{
+        fetchId: fetchAction.productID
+      };
+    case DELETE_CURRENT_PRODUCT:
+      const fetchDeleteAction: FetchSelectedProduct = action as FetchSelectedProduct;
+      return {
         ...state,
-        fetchId:fetchDeleteAction.productID
-      }
+        fetchId: fetchDeleteAction.productID
+      };
     default:
       return state;
   }

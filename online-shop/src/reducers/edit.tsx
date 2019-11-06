@@ -1,18 +1,13 @@
 import { IStateEdit } from "../model/Interfaces";
 import {
   EditActions,
-  AddProduct,
-  ProductTranfer,
-  UpdateProduct,
   READ_PRODUCT,
   ADD_NEW_PRODUCT,
   UPDATE_PRODUCT,
   SAVE_CATEGORIES,
-  SaveCategories,
-  FETCH_UPDATE,
-  FetchUpdateProduct,
-  FETCH_ADD,
-  FetchAddNewProduct
+  UPDATE_CURRENT_PRODUCT,
+  CREATE_NEW_PRODUCT,
+  EDIT_OR_ADD
 } from "../actions/editActions";
 
 const initialDetailsState: IStateEdit = {
@@ -20,7 +15,16 @@ const initialDetailsState: IStateEdit = {
   listOfProducts: [],
   categories: [],
   displayType: "",
-  productID: {} as any
+  productID: {} as any,
+  productToDisplay: {} as any,
+  defaultProduct: {
+    id: 0,
+    name: "",
+    price: 0,
+    category: "",
+    description: "",
+    image: ""
+  }
 };
 
 export function productEditManipulation(
@@ -28,55 +32,69 @@ export function productEditManipulation(
   action: EditActions
 ): IStateEdit {
   switch (action.type) {
-    case READ_PRODUCT:
-      const readAction: ProductTranfer = action as ProductTranfer;
+    case READ_PRODUCT: {
       return {
-        givenProduct: readAction.product,
+        givenProduct: action.product,
         listOfProducts: [...state.listOfProducts],
         categories: state.categories,
-        displayType: readAction.displayType,
-        productID: state.productID
+        displayType: action.displayType,
+        productID: state.productID,
+        defaultProduct: state.defaultProduct,
+        productToDisplay: action.product
       };
-    case UPDATE_PRODUCT:
-      const updateAction: UpdateProduct = action as UpdateProduct;
+    }
+    case UPDATE_PRODUCT: {
       return {
-        givenProduct: updateAction.product,
-        listOfProducts: updateAction.productList,
+        givenProduct: action.product,
+        listOfProducts: action.productList,
         categories: state.categories,
         displayType: state.displayType,
-        productID: state.productID
+        productID: state.productID,
+        defaultProduct: state.defaultProduct,
+        productToDisplay: state.productToDisplay
       };
-    case ADD_NEW_PRODUCT:
-      const addNewAction: AddProduct = action as AddProduct;
+    }
+    case ADD_NEW_PRODUCT: {
       return {
-        givenProduct: addNewAction.product,
-        listOfProducts: addNewAction.productList,
+        givenProduct: action.product,
+        listOfProducts: action.productList,
         categories: state.categories,
         displayType: state.displayType,
-        productID: state.productID
+        productID: state.productID,
+        defaultProduct: state.defaultProduct,
+        productToDisplay: state.productToDisplay
       };
-    case SAVE_CATEGORIES:
-      const categoriesAction: SaveCategories = action as SaveCategories;
+    }
+    case SAVE_CATEGORIES: {
       return {
         givenProduct: state.givenProduct,
         listOfProducts: state.listOfProducts,
-        categories: categoriesAction.categories,
+        categories: action.categories,
         displayType: state.displayType,
-        productID: state.productID
+        productID: state.productID,
+        defaultProduct: state.defaultProduct,
+        productToDisplay: state.productToDisplay
       };
-    case FETCH_UPDATE:
-      const fetchAction: FetchUpdateProduct = action as FetchUpdateProduct;
+    }
+    case EDIT_OR_ADD: {
       return {
         ...state,
-        givenProduct: fetchAction.productUpdated,
-        productID: fetchAction.productID
+        productToDisplay: action.product
       };
-    case FETCH_ADD:
-      const fetchAddAction: FetchAddNewProduct = action as FetchAddNewProduct;
+    }
+    case UPDATE_CURRENT_PRODUCT: {
       return {
         ...state,
-        givenProduct: fetchAddAction.productUpdated
+        givenProduct: action.productUpdated,
+        productID: action.productID
       };
+    }
+    case CREATE_NEW_PRODUCT: {
+      return {
+        ...state,
+        givenProduct: action.productUpdated
+      };
+    }
 
     default:
       return state;

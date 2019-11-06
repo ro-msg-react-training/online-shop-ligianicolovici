@@ -3,8 +3,9 @@ export const READ_PRODUCT = "READ-PRODUCT";
 export const UPDATE_PRODUCT = "UPDATE-PRODUCT";
 export const ADD_NEW_PRODUCT = "ADD_NEW_PRODUCT";
 export const SAVE_CATEGORIES = "SAVE-CATEGORIES";
-export const FETCH_UPDATE = "FETCH-UPDATE";
-export const FETCH_ADD = "FETCH-ADD";
+export const UPDATE_CURRENT_PRODUCT = "UPDATE-CURRENT-PRODUCT";
+export const CREATE_NEW_PRODUCT = "CREATE-NEW-PRODUCT";
+export const EDIT_OR_ADD = " EDIT_OR_ADD";
 
 export interface ProductTranfer {
   type: typeof READ_PRODUCT;
@@ -25,13 +26,17 @@ export interface SaveCategories {
   type: typeof SAVE_CATEGORIES;
   categories: string[];
 }
+export interface EditOrAdd {
+  type: typeof EDIT_OR_ADD;
+  product: IProduct;
+}
 export interface FetchUpdateProduct {
-  type: typeof FETCH_UPDATE;
+  type: typeof UPDATE_CURRENT_PRODUCT;
   productID: number;
   productUpdated: IProduct;
 }
 export interface FetchAddNewProduct {
-  type: typeof FETCH_ADD;
+  type: typeof CREATE_NEW_PRODUCT;
   productUpdated: IProduct;
 }
 export function displayProduct(
@@ -71,19 +76,25 @@ export function categoriesListSaving(categories: string[]): EditActions {
     categories: categories
   };
 }
+export function editOrAddProduct(product: IProduct): EditActions {
+  return {
+    type: EDIT_OR_ADD,
+    product: product
+  };
+}
 export function fetchUpdateProduct(
   id: number,
   productUpdated: IProduct
 ): EditActions {
   return {
-    type: FETCH_UPDATE,
+    type: UPDATE_CURRENT_PRODUCT,
     productID: id,
     productUpdated: productUpdated
   };
 }
 export function fetchAddNewProduct(productUpdated: IProduct): EditActions {
   return {
-    type: FETCH_ADD,
+    type: CREATE_NEW_PRODUCT,
     productUpdated: productUpdated
   };
 }
@@ -94,4 +105,5 @@ export type EditActions =
   | UpdateProduct
   | SaveCategories
   | FetchUpdateProduct
-  | FetchAddNewProduct;
+  | FetchAddNewProduct
+  | EditOrAdd;
