@@ -139,12 +139,12 @@ class DetailsManagement extends React.Component<EditDetailsProps> {
 }
 
 const mapStateToProps = (state: AppState) => ({
-  product: state.editReducer.givenProduct,
-  productList: state.productListReducer.data,
-  categories: state.editReducer.categories,
-  displayType: state.editReducer.displayType,
-  defaultProduct: state.editReducer.defaultProduct,
-  productToDisplay: state.editReducer.productToDisplay
+  product: state.editProduct.givenProduct,
+  productList: state.products.data,
+  categories: state.editProduct.categories,
+  displayType: state.editProduct.displayType,
+  defaultProduct: state.editProduct.defaultProduct,
+  productToDisplay: state.editProduct.productToDisplay
 });
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   saveCategories: (categoriesArray: string[]) =>

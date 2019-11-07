@@ -143,8 +143,6 @@ export const ProductInfoDisplay = (props: IDumbProductManagement) => {
                           (e.target as HTMLInputElement).value.trim()
                         );
                       }}
-                      // defaultValue={props.product.category}
-                      // onChange={props.onCategoryChange}
                     >
                       {displayCategories}
                     </select>
@@ -169,8 +167,6 @@ export const ProductInfoDisplay = (props: IDumbProductManagement) => {
                       props.onDetailsChange(e);
                       setDetails((e.target as HTMLInputElement).value.trim());
                     }}
-                    // defaultValue={props.product.description}
-                    // onChange={props.onDetailsChange}
                   ></textarea>
                 </div>
               </div>

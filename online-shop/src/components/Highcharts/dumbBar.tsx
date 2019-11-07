@@ -17,7 +17,9 @@ export const NavMaker = (props: IDumbBar) => {
   };
 
   if (props.isLoading) {
-    return <p>Loading ....</p>;
+    return (
+      <div className="pageloader is-active"><span className="title">Loading highcharts</span></div>
+    );
   }
   return (
     <div className="tabs is-centered is-boxed">

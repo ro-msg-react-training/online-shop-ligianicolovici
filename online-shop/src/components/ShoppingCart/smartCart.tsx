@@ -106,17 +106,16 @@ class ShoppingCart extends React.Component<CartProps> {
 
 const mapStateToProps = (state: AppState, myOwnState: LocalStateshop) => ({
   onDeleteItemFromShopping: myOwnState.onDeleteItemFromShopping,
-  hasProducts: state.shoppingReducer.hasProducts,
-  data: state.shoppingReducer.cartProducts,
-  showModal: state.shoppingReducer.showModal,
-  response: state.shoppingReducer.responseFromBackend,
-  modalText: state.shoppingReducer.modalText,
-  modalTitle: state.shoppingReducer.modalTitle
+  hasProducts: state.shoppingCart.hasProducts,
+  data: state.shoppingCart.cartProducts,
+  showModal: state.shoppingCart.showModal,
+  response: state.shoppingCart.responseFromBackend,
+  modalText: state.shoppingCart.modalText,
+  modalTitle: state.shoppingCart.modalTitle
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  checkOut: (productsInCart: ICartProduct[], message: string, title: string) =>
-    dispatch(checkOut(productsInCart, message, title)),
+  checkOut: (productsInCart: ICartProduct[], message: string, title: string) => dispatch(checkOut(productsInCart, message, title)),
   eraseItem: (product: IProduct) => dispatch(eraseItem(product)),
   quantityUp: (product: IProduct) => dispatch(quantityUp(product)),
   quantityDown: (product: IProduct) => dispatch(quantityDown(product)),

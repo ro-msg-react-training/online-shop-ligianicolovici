@@ -117,16 +117,16 @@ class ProductDetails extends React.Component<ProductDetailsProps, LocalState> {
   }
 }
 const mapStateToProps = (state: AppState, myOwnState: LocalState) => ({
-  prodReducer: state.prodReducer.selectedProduct,
+  prodReducer: state.product.selectedProduct,
   onAddProduct: myOwnState.onAddProduct,
   onDeleteProduct: myOwnState.onDeleteProduct,
   match: myOwnState.match,
-  data: state.prodReducer.selectedProduct,
-  showModel: state.prodReducer.showModel,
-  messagePopUp: state.prodReducer.messagePopUp,
-  titlePopUp: state.prodReducer.titlePopUp,
-  productToDelete: state.prodReducer.productToDelete,
-  crtCart: state.shoppingReducer.cartProducts
+  data: state.product.selectedProduct,
+  showModel: state.product.showModel,
+  messagePopUp: state.product.messagePopUp,
+  titlePopUp: state.product.titlePopUp,
+  productToDelete: state.product.productToDelete,
+  crtCart: state.shoppingCart.cartProducts
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

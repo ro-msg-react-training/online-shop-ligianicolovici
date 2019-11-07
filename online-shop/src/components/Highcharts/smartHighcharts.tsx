@@ -60,9 +60,9 @@ export class HighChartComponent extends React.Component<HighchartProps> {
   }
 }
 const mapStateToProps = (state: AppState) => ({
-  sales: state.chartReducer.data,
-  isLoading: state.chartReducer.isLoading,
-  chartType: state.chartReducer.chartType
+  sales: state.charts.data,
+  isLoading: state.charts.isLoading,
+  chartType: state.charts.chartType
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

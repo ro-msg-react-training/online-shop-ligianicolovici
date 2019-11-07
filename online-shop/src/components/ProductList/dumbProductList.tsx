@@ -1,15 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { IProduct, ProductImagesUrls } from "../../model/Interfaces";
 import { Link } from "react-router-dom";
+import "../../App.sass";
 export interface IDumbProdList {
   productList: IProduct[];
   isLoading: boolean;
   defaultImg: string;
 }
 export const ProductListView = (props: IDumbProdList) => {
-  if (props.isLoading) {
-    return <p>Loading ....</p>;
-  }
+  const [loading, setLoadingIndicator] = useState(props.isLoading);
+
+  useEffect(() => {
+    setLoadingIndicator(props.isLoading);
+  }, [props.isLoading]);
+
+  let pageSetUp = () => {
+    if (loading === true) {
+      return (
+        <div className="pageloader is-active"><span className="title">Loading products</span></div>
+      );
+    } else {
+      return null;
+    }
+  };
   let products = [...props.productList].map((productt, key) => (
     <Link to={`/products/${productt.id}`}>
       <div className="product">
@@ -31,6 +44,7 @@ export const ProductListView = (props: IDumbProdList) => {
   return (
     <React.Fragment>
       <div id="content">
+        {pageSetUp()}
         <div className="products">{products}</div>
       </div>
     </React.Fragment>

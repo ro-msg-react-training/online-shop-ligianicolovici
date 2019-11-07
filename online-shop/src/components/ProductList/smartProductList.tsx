@@ -36,8 +36,8 @@ export class ProductList extends React.Component<ProductListProps> {
   }
 }
 const mapStateToProps = (state: AppState, myOwnState: LocalState) => ({
-  productList: state.productListReducer.data,
-  isLoading: state.productListReducer.isLoading,
+  productList: state.products.data,
+  isLoading: state.products.isLoading,
   match: myOwnState.match
 });
 
