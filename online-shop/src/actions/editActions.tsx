@@ -5,7 +5,8 @@ export const ADD_NEW_PRODUCT = "ADD_NEW_PRODUCT";
 export const SAVE_CATEGORIES = "SAVE-CATEGORIES";
 export const UPDATE_CURRENT_PRODUCT = "UPDATE-CURRENT-PRODUCT";
 export const CREATE_NEW_PRODUCT = "CREATE-NEW-PRODUCT";
-export const EDIT_OR_ADD = " EDIT_OR_ADD";
+export const EDIT_OR_ADD = "EDIT_OR_ADD";
+export const CHANGE_LOADING_STATUS_EDIT = "CHANGE_LOADING_STATUS_EDIT";
 
 export interface ProductTranfer {
   type: typeof READ_PRODUCT;
@@ -38,6 +39,10 @@ export interface FetchUpdateProduct {
 export interface FetchAddNewProduct {
   type: typeof CREATE_NEW_PRODUCT;
   productUpdated: IProduct;
+}
+export interface SwitchLoadingStatusEdit{
+  type:typeof CHANGE_LOADING_STATUS_EDIT;
+  isLoading:boolean;
 }
 export function displayProduct(
   data: IProduct,
@@ -98,6 +103,12 @@ export function fetchAddNewProduct(productUpdated: IProduct): EditActions {
     productUpdated: productUpdated
   };
 }
+  export function swithLoadingStatusEdit():EditActions{
+    return{
+      type:CHANGE_LOADING_STATUS_EDIT,
+      isLoading:false
+    }
+  }
 
 export type EditActions =
   | AddProduct
@@ -106,4 +117,5 @@ export type EditActions =
   | SaveCategories
   | FetchUpdateProduct
   | FetchAddNewProduct
-  | EditOrAdd;
+  | EditOrAdd
+  | SwitchLoadingStatusEdit;

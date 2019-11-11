@@ -7,7 +7,8 @@ import {
   SAVE_CATEGORIES,
   UPDATE_CURRENT_PRODUCT,
   CREATE_NEW_PRODUCT,
-  EDIT_OR_ADD
+  EDIT_OR_ADD,
+  CHANGE_LOADING_STATUS_EDIT,
 } from "../actions/editActions";
 
 const initialDetailsState: IStateEdit = {
@@ -24,7 +25,8 @@ const initialDetailsState: IStateEdit = {
     category: "",
     description: "",
     image: ""
-  }
+  },
+  isloading:false,
 };
 
 export function productEditManipulation(
@@ -40,7 +42,8 @@ export function productEditManipulation(
         displayType: action.displayType,
         productID: state.productID,
         defaultProduct: state.defaultProduct,
-        productToDisplay: action.product
+        productToDisplay: action.product,
+        isloading:false
       };
     }
     case UPDATE_PRODUCT: {
@@ -51,7 +54,8 @@ export function productEditManipulation(
         displayType: state.displayType,
         productID: state.productID,
         defaultProduct: state.defaultProduct,
-        productToDisplay: state.productToDisplay
+        productToDisplay: state.productToDisplay,
+        isloading:false
       };
     }
     case ADD_NEW_PRODUCT: {
@@ -62,7 +66,8 @@ export function productEditManipulation(
         displayType: state.displayType,
         productID: state.productID,
         defaultProduct: state.defaultProduct,
-        productToDisplay: state.productToDisplay
+        productToDisplay: state.productToDisplay,
+        isloading:false
       };
     }
     case SAVE_CATEGORIES: {
@@ -73,28 +78,38 @@ export function productEditManipulation(
         displayType: state.displayType,
         productID: state.productID,
         defaultProduct: state.defaultProduct,
-        productToDisplay: state.productToDisplay
+        productToDisplay: state.productToDisplay,
+        isloading:state.isloading
       };
     }
     case EDIT_OR_ADD: {
       return {
         ...state,
-        productToDisplay: action.product
+        productToDisplay: action.product,
+        isloading:state.isloading
+        
       };
     }
     case UPDATE_CURRENT_PRODUCT: {
       return {
         ...state,
         givenProduct: action.productUpdated,
-        productID: action.productID
+        productID: action.productID,
+        isloading:false,
       };
     }
     case CREATE_NEW_PRODUCT: {
       return {
         ...state,
-        givenProduct: action.productUpdated
+        givenProduct: action.productUpdated,
+        isloading:false,
       };
     }
+    case CHANGE_LOADING_STATUS_EDIT:
+      return {
+        ...state,
+        isloading:false,
+      };
 
     default:
       return state;

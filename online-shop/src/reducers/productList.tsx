@@ -1,9 +1,11 @@
 import { IProduct } from "../model/Interfaces";
 import {
   LOAD_PRODUCTS,
-  LoadTheProductList,
   GET_PRODUCT_LIST,
-  ListActions
+  ListActions,
+  CHANGE_LOADING_STATUS,
+  DELETE_PRODUCT_FROM_UI,
+  LOAD_LIST_INCOGNITO
 } from "../actions/productListActions";
 export interface ProductListState {
   data: IProduct[];
@@ -22,12 +24,29 @@ export function productListReducer(
     case LOAD_PRODUCTS:
       return {
         data: [...action.data],
-        isLoading: action.isLoading
+        isLoading: true,
       };
     case GET_PRODUCT_LIST:
       return {
-        ...state
+        ...state,
+        isLoading:true
+       
       };
+    case CHANGE_LOADING_STATUS:
+      return{
+        ...state,
+        isLoading:false
+      };
+      case DELETE_PRODUCT_FROM_UI:
+          return{
+            ...state,
+            data:state.data.filter((product:IProduct)=>product.id!=action.productId)
+          };
+          case LOAD_LIST_INCOGNITO:
+              return{
+                ...state,
+                data:state.data
+              };
     default:
       return state;
   }

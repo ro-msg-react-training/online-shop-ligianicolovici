@@ -2,6 +2,8 @@ import { ISales } from "../model/Interfaces";
 export const LOAD_SALES = "LOAD-SALES";
 export const GET_SALES = "GET-SALES";
 export const CHANGE_CHART = "CHANGE-CHART";
+export const CHANGE_LOADING_STATUS = "CHANGE_LOADING_STATUS";
+
 export interface LoadSales {
   type: typeof LOAD_SALES;
   data: ISales[];
@@ -13,6 +15,10 @@ export interface Fetch {
 export interface ChangeChart {
   type: typeof CHANGE_CHART;
   chartType: string;
+}
+export interface SwitchLoadingStatus{
+  type:typeof CHANGE_LOADING_STATUS;
+  isLoading:boolean;
 }
 
 export function loadCurrentSales(
@@ -36,4 +42,11 @@ export function changeChart(chartType: string): ChangeChart {
     chartType: chartType
   };
 }
-export type SalesActions = LoadSales | Fetch | ChangeChart;
+  export function swithLoadingStatus():SalesActions{
+    return{
+      type:CHANGE_LOADING_STATUS,
+      isLoading:false
+    }
+  }
+
+export type SalesActions = LoadSales | Fetch | ChangeChart|SwitchLoadingStatus;

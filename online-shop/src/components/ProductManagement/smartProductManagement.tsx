@@ -13,10 +13,13 @@ import {
   displayProduct,
   fetchUpdateProduct,
   fetchAddNewProduct,
-  editOrAddProduct
+  editOrAddProduct,
+  swithLoadingStatusEdit
 } from "../../actions/editActions";
 import { loadProducts } from "../../actions/productListActions";
 import { IDumbProductManagement, ProductInfoDisplay } from "./dumbPMDisplay";
+import { compose } from "recompose";
+import { withLoading } from "../HOCS/LoaderHOC";
 library.add(faShoppingBasket, faEraser);
 
 interface EditDetailsProps {
@@ -30,8 +33,10 @@ interface EditDetailsProps {
   editOrAddProduct: (product: IProduct) => void;
   fetchUpdateProduct: (id: number, productUpdated: IProduct) => void;
   fetchAddNewProduct: (productUpdated: IProduct) => void;
+  switchLoadingStatus:()=>void;
   defaultProduct: IProduct;
   productToDisplay: IProduct;
+  isLoading:boolean;
 }
 class DetailsManagement extends React.Component<EditDetailsProps> {
   onNameChange = (e: SyntheticEvent) => {
@@ -75,6 +80,7 @@ class DetailsManagement extends React.Component<EditDetailsProps> {
   checkIfNewOrEdit() {
     if (this.props.displayType === "add") {
       this.props.displayProduct(this.props.defaultProduct, "add");
+      // this.props.switchLoadingStatus();
       this.render();
     }
   }
@@ -128,7 +134,8 @@ class DetailsManagement extends React.Component<EditDetailsProps> {
       onCategoryChange: this.onCategoryChange.bind(this),
       onDetailsChange: this.onDetailsChange.bind(this),
       updateProduct: this.updateProduct.bind(this),
-      addProduct: this.addProduct.bind(this)
+      addProduct: this.addProduct.bind(this),
+      // switchLoading:()=>this.props.switchLoadingStatus()
     };
     return (
       <div>
@@ -144,7 +151,8 @@ const mapStateToProps = (state: AppState) => ({
   categories: state.editProduct.categories,
   displayType: state.editProduct.displayType,
   defaultProduct: state.editProduct.defaultProduct,
-  productToDisplay: state.editProduct.productToDisplay
+  productToDisplay: state.editProduct.productToDisplay,
+  isLoading:state.editProduct.isloading
 });
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   saveCategories: (categoriesArray: string[]) =>
@@ -157,11 +165,17 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchUpdateProduct: (id: number, productUpdated: IProduct) =>
     dispatch(fetchUpdateProduct(id, productUpdated)),
   fetchAddNewProduct: (productUpdated: IProduct) =>
-    dispatch(fetchAddNewProduct(productUpdated))
+    dispatch(fetchAddNewProduct(productUpdated)),
+  switchLoadingStatus: () =>
+    dispatch(swithLoadingStatusEdit()),  
 });
 
-const EditDetailsInitializer = connect(
-  mapStateToProps,
-  mapDispatchToProps
+const EditDetailsInitializer = compose<EditDetailsProps, {}>(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
+  withLoading
 )(DetailsManagement);
 export default EditDetailsInitializer;
+

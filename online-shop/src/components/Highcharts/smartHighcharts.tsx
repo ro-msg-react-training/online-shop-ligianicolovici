@@ -10,6 +10,9 @@ import "../../productModeling/chart.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faChartPie } from "@fortawesome/free-solid-svg-icons";
+import { LoadingProps, withLoading } from "../HOCS/LoaderHOC";
+import { NavBarMaker } from "../NavBar/dumbNavBar";
+import { compose, lifecycle } from "recompose";
 
 library.add(faChartPie);
 
@@ -20,17 +23,14 @@ interface HighchartProps {
   isLoading: boolean;
   chartType: string;
 }
-
+const onComponentDidMount = lifecycle<HighchartProps, {}, {}>({
+  componentDidMount() {
+    this.props.fetchSales();
+  }
+});
 export class HighChartComponent extends React.Component<HighchartProps> {
   constructor(props: HighchartProps) {
     super(props);
-  }
-
-  callLoadSales() {
-    this.props.fetchSales();
-  }
-  componentDidMount() {
-    this.callLoadSales();
   }
   render() {
     let dumbNavData: IDumbBar = {
@@ -63,6 +63,7 @@ const mapStateToProps = (state: AppState) => ({
   sales: state.charts.data,
   isLoading: state.charts.isLoading,
   chartType: state.charts.chartType
+  // loading: state.charts.isLoading
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -70,8 +71,12 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   changeChart: (chartType: string) => dispatch(changeChart(chartType))
 });
 
-const ChartInitializer = connect(
-  mapStateToProps,
-  mapDispatchToProps
+const ChartInitializer = compose<HighchartProps, {}>(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
+  onComponentDidMount,
+  withLoading
 )(HighChartComponent);
 export default ChartInitializer;

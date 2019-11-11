@@ -11,10 +11,13 @@ import {
   quantityUp,
   quantityDown,
   hideThePopUp,
-  fetchOrder
+  fetchOrder,
+  switchLoading
 } from "../../actions/shoppingActions";
 import { connect } from "react-redux";
 import { CartContent, IDumbCart } from "./dumbCartContent";
+import { lifecycle, compose } from "recompose";
+import { withLoading } from "../HOCS/LoaderHOC";
 
 library.add(faShoppingCart);
 
@@ -47,6 +50,8 @@ export interface CartProps {
     title: string,
     json: string
   ) => void;
+  switchLoading:()=>void;
+  isLoading:boolean;
 }
 
 class ShoppingCart extends React.Component<CartProps> {
@@ -111,7 +116,8 @@ const mapStateToProps = (state: AppState, myOwnState: LocalStateshop) => ({
   showModal: state.shoppingCart.showModal,
   response: state.shoppingCart.responseFromBackend,
   modalText: state.shoppingCart.modalText,
-  modalTitle: state.shoppingCart.modalTitle
+  modalTitle: state.shoppingCart.modalTitle,
+  isLoading:state.shoppingCart.isLoading
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -120,6 +126,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   quantityUp: (product: IProduct) => dispatch(quantityUp(product)),
   quantityDown: (product: IProduct) => dispatch(quantityDown(product)),
   hideThePopUp: () => dispatch(hideThePopUp()),
+  switchLoading:()=>dispatch(switchLoading()),
   fetchOrder: (
     productsInCart: ICartProduct[],
     message: string,
@@ -128,9 +135,12 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ) => dispatch(fetchOrder(productsInCart, message, title, json))
 });
 
-const ShoppingCartInitializer = connect(
+const ShoppingCartInitializer = compose<CartProps,LocalStateshop> (
+  connect(
   mapStateToProps,
   mapDispatchToProps
-)(ShoppingCart);
+),
+withLoading)
+(ShoppingCart);
 
 export default ShoppingCartInitializer;

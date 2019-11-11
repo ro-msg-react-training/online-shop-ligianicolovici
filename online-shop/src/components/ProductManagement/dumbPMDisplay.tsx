@@ -1,6 +1,6 @@
 import React, { SyntheticEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faShoppingBasket, faEraser } from "@fortawesome/free-solid-svg-icons";
 import { IProduct } from "../../model/Interfaces";
@@ -12,6 +12,7 @@ export interface IDumbProductManagement {
   product: IProduct;
   categories: string[];
   displayType: string;
+  
   onNameChange: (e: SyntheticEvent) => void;
   onPriceChange: (e: SyntheticEvent) => void;
   onImageChange: (e: SyntheticEvent) => void;
@@ -19,6 +20,7 @@ export interface IDumbProductManagement {
   onDetailsChange: (e: SyntheticEvent) => void;
   updateProduct: () => void;
   addProduct: () => void;
+  // switchLoading:()=>void;
 }
 
 export const ProductInfoDisplay = (props: IDumbProductManagement) => {
@@ -180,8 +182,12 @@ export const ProductInfoDisplay = (props: IDumbProductManagement) => {
               onClick={() => {
                 if (props.displayType === "edit") {
                   props.updateProduct();
+                
+                  
                 } else {
                   props.addProduct();
+               
+                  
                 }
               }}
             >

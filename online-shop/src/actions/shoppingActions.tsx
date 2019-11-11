@@ -6,6 +6,7 @@ export const CHECK_OUT = "CHECK-OUT";
 export const LOAD_CART = "LOAD-CART";
 export const HIDE_POPUP = "HIDE-POPUP";
 export const SEND_ORDER = "SEND-ORDER";
+export const SWITCH_LOADING="SWITCH_LOADING";
 
 export interface EraseItem {
   type: typeof DELETE_PRODUCT_FROM_CART;
@@ -41,6 +42,10 @@ export interface FetchOrder {
   modalText: string;
   cartProducts: ICartProduct[];
   json: string;
+}
+export interface ChangeLoadingIndicator{
+  type:string,
+  isLoading:boolean,
 }
 
 export function hideThePopUp(): CartActions {
@@ -86,6 +91,13 @@ export function quantityDown(product: IProduct): CartActions {
     product: product
   };
 }
+export function switchLoading(): CartActions {
+  return {
+    type: SWITCH_LOADING,
+    isLoading: false
+  };
+}
+
 export function fetchOrder(
   cartItems: ICartProduct[],
   msg: string,
@@ -107,4 +119,5 @@ export type CartActions =
   | CheckOut
   | LoadCart
   | ModalOff
-  | FetchOrder;
+  | FetchOrder
+  |ChangeLoadingIndicator;

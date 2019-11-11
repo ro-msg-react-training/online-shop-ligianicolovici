@@ -2,18 +2,36 @@ import { all, takeLatest, put, call } from "redux-saga/effects";
 import {
   FetchSelectedProduct,
   GET_SELECTED_PRODUCT,
-  DELETE_CURRENT_PRODUCT
+  DELETE_CURRENT_PRODUCT,
+  changeLoadingIndicator,
+  loadProduct
 } from "../actions/productActions";
 import { ICartProduct } from "../model/Interfaces";
-import { FetchOrder, SEND_ORDER } from "../actions/shoppingActions";
+import {
+  FetchOrder,
+  SEND_ORDER,
+  switchLoading,
+  checkOut
+} from "../actions/shoppingActions";
 import {
   FetchUpdateProduct,
   FetchAddNewProduct,
   UPDATE_CURRENT_PRODUCT,
   CREATE_NEW_PRODUCT
 } from "../actions/editActions";
-import { GET_PRODUCT_LIST } from "../actions/productListActions";
-import { GET_SALES } from "../actions/highChartActions";
+import {
+  GET_PRODUCT_LIST,
+  changeLoadingStatus,
+  deleteProductFromUI,
+  loadListIncognito,
+  loadProducts,
+  fetchTheList
+} from "../actions/productListActions";
+import {
+  GET_SALES,
+  swithLoadingStatus,
+  loadCurrentSales
+} from "../actions/highChartActions";
 
 function* fetchProductList() {
   const data = yield fetch("http://localhost:4000/products", { method: "GET" })
@@ -21,20 +39,18 @@ function* fetchProductList() {
     .then(result => {
       return result;
     });
-  yield put({ type: "LOAD-PRODUCTS", data });
+  yield put(loadProducts(data, true));
+  yield put(changeLoadingStatus());
 }
 
 function* fetchDeleteDetailsProduct(action: FetchSelectedProduct) {
   yield fetch("http://localhost:4000/products/" + action.productID, {
     method: "delete"
-  }).then(response => console.log(response.status));
-  const data = yield fetch("http://localhost:4000/products")
-    .then(response => response.json())
-    .then(data => {
-      return data;
-    });
-  yield put({ type: "LOAD-PRODUCTS", data });
-  yield put({ type: "HIDE-MODAL" });
+  }).then(response => {
+    console.log(response.status);
+  });
+
+  yield put(deleteProductFromUI(action.productID));
 }
 
 function* fetchProductDetails(action: FetchSelectedProduct) {
@@ -45,7 +61,8 @@ function* fetchProductDetails(action: FetchSelectedProduct) {
     .then(result => {
       return result;
     });
-  yield put({ type: "LOAD-PRODUCT", product });
+  yield put(loadProduct(product));
+  yield put(changeLoadingIndicator(false));
 }
 
 function* fetchTheOrder(action: FetchOrder) {
@@ -66,7 +83,8 @@ function* fetchTheOrder(action: FetchOrder) {
         modalText = "Order succesfully placed";
       }
     });
-  yield put({ type: "CHECK-OUT", cartProducts, modalText, modalTitle });
+  yield put(checkOut(cartProducts, modalText, modalTitle));
+  yield put(switchLoading());
 }
 
 function* fetchUpdatedProduct(action: FetchUpdateProduct) {
@@ -85,12 +103,7 @@ function* fetchUpdatedProduct(action: FetchUpdateProduct) {
     .then(() => {
       console.log(result);
     });
-  const data = yield fetch("http://localhost:4000/products")
-    .then(response => response.json())
-    .then(data => {
-      return data;
-    });
-  yield put({ type: "LOAD-PRODUCTS", data });
+  yield put(fetchTheList());
 }
 function* fetchAddNewProduct(action: FetchAddNewProduct) {
   let result: number = 0;
@@ -108,12 +121,7 @@ function* fetchAddNewProduct(action: FetchAddNewProduct) {
     .then(() => {
       console.log(result);
     });
-  const data = yield fetch("http://localhost:4000/products")
-    .then(response => response.json())
-    .then(data => {
-      return data;
-    });
-  yield put({ type: "LOAD-PRODUCTS", data });
+  yield put(fetchTheList());
 }
 
 function* fetchSales() {
@@ -122,7 +130,9 @@ function* fetchSales() {
     .then(result => {
       return result;
     });
-  yield put({ type: "LOAD-SALES", data });
+
+  yield put(loadCurrentSales(data, true));
+  yield put(swithLoadingStatus());
 }
 
 function* actionWatcher() {

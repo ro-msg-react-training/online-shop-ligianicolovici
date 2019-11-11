@@ -3,7 +3,8 @@ import {
   LOAD_SALES,
   GET_SALES,
   SalesActions,
-  CHANGE_CHART
+  CHANGE_CHART,
+  CHANGE_LOADING_STATUS
 } from "../actions/highChartActions";
 export interface ChartState {
   data: ISales[];
@@ -24,7 +25,7 @@ export function highChartReducer(
     case LOAD_SALES:
       return {
         data: [...action.data],
-        isLoading: action.isLoading,
+        isLoading: true,
         chartType: state.chartType
       };
     case CHANGE_CHART:
@@ -35,8 +36,16 @@ export function highChartReducer(
       };
     case GET_SALES:
       return {
-        ...state
+        ...state,
+        isLoading:true
       };
+
+    case CHANGE_LOADING_STATUS:
+      return {
+        ...state,
+        isLoading: false,
+      };
+
     default:
       return state;
   }

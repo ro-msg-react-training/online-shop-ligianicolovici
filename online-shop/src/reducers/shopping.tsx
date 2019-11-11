@@ -13,7 +13,8 @@ import {
   DECREASE_QUANTITY,
   DELETE_PRODUCT_FROM_CART,
   CHECK_OUT,
-  FetchOrder
+  FetchOrder,
+  SWITCH_LOADING
 } from "../actions/shoppingActions";
 
 const initialShoppingState: IStateCart = {
@@ -24,7 +25,8 @@ const initialShoppingState: IStateCart = {
   showModal: false,
   modalTitle: "Order Status",
   modalText: "Error",
-  json: ""
+  json: "",
+  isLoading:false
 };
 
 export function shoppingCartManipulation(
@@ -41,7 +43,8 @@ export function shoppingCartManipulation(
         orderItem: state.orderItem,
         modalText: state.modalText,
         modalTitle: state.modalTitle,
-        json: state.json
+        json: state.json,
+        isLoading:state.isLoading
       };
     case LOAD_CART:
       const loadAction: LoadCart = action as LoadCart;
@@ -53,7 +56,8 @@ export function shoppingCartManipulation(
         orderItem: state.orderItem,
         modalText: state.modalText,
         modalTitle: state.modalTitle,
-        json: state.json
+        json: state.json,
+        isLoading:false
       };
     case INCREASE_QUANTITY:
       const addAction: QuantityUP = action as QuantityUP;
@@ -65,7 +69,8 @@ export function shoppingCartManipulation(
         orderItem: state.orderItem,
         modalText: state.modalText,
         modalTitle: state.modalTitle,
-        json: state.json
+        json: state.json,
+        isLoading:state.isLoading
       };
     case DECREASE_QUANTITY:
       const eraseAction: QuantityDown = action as QuantityDown;
@@ -77,7 +82,8 @@ export function shoppingCartManipulation(
         orderItem: state.orderItem,
         modalText: state.modalText,
         modalTitle: state.modalTitle,
-        json: state.json
+        json: state.json,
+        isLoading:state.isLoading
       };
     case DELETE_PRODUCT_FROM_CART:
       const deleteAction: EraseItem = action as EraseItem;
@@ -91,7 +97,8 @@ export function shoppingCartManipulation(
         orderItem: state.orderItem,
         modalText: state.modalText,
         modalTitle: state.modalTitle,
-        json: state.json
+        json: state.json,
+        isLoading:state.isLoading
       };
 
     case CHECK_OUT:
@@ -104,7 +111,8 @@ export function shoppingCartManipulation(
         orderItem: state.orderItem,
         modalText: checkOutAction.modalText,
         modalTitle: checkOutAction.modalTitle,
-        json: state.json
+        json: state.json,
+        isLoading:true
       };
     case SEND_ORDER:
       const fetchAction: FetchOrder = action as FetchOrder;
@@ -114,8 +122,14 @@ export function shoppingCartManipulation(
         modalText: fetchAction.modalText,
         modalTitle: fetchAction.modalTitle,
         json: fetchAction.json,
-        showModal: true
+        showModal: true,
+        isLoading:true
       };
+      case SWITCH_LOADING:
+        return {
+          ...state,
+          isLoading:false
+        };
 
     default:
       return state;

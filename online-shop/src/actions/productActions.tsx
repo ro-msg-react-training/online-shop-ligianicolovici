@@ -6,6 +6,7 @@ export const HIDE_POPUP = "HIDE-POPUP";
 export const LOAD_PRODUCT = "LOAD-PRODUCT";
 export const GET_SELECTED_PRODUCT = "GET-SELECTED-PRODUCT";
 export const DELETE_CURRENT_PRODUCT = "DELETE-CURRENT-PRODUCT";
+export const CHANGE_LOADING_INDICATOR="LOADING-INDICATOR"
 
 export interface ProductOperations {
   type: typeof DELETE_PRODUCT;
@@ -24,10 +25,18 @@ export interface FetchSelectedProduct {
   type: string;
   productID: number;
 }
+export interface FetchDeletedProduct {
+  type: string;
+  productID: number;
+  isLoading:boolean;
+}
 export interface ModalOff {
   type: string;
 }
-
+export interface ChangeLoadingInd{
+  type:string,
+  isLoading:boolean;
+}
 export function loadProduct(data: IProduct): DetailsActions {
   return {
     type: LOAD_PRODUCT,
@@ -67,10 +76,17 @@ export function fetchSelected(id: number): FetchSelectedProduct {
   };
 }
 
-export function fetchDelete(id: number): FetchSelectedProduct {
+export function fetchDelete(id: number,loadingInd:boolean): FetchDeletedProduct {
   return {
     type: DELETE_CURRENT_PRODUCT,
-    productID: id
+    productID: id,
+    isLoading:loadingInd
+  };
+}
+export function changeLoadingIndicator(isLoading:boolean): ChangeLoadingInd {
+  return {
+    type: CHANGE_LOADING_INDICATOR,
+    isLoading: isLoading,
   };
 }
 export type DetailsActions =
@@ -78,4 +94,6 @@ export type DetailsActions =
   | ModalOn
   | ProductDisplay
   | ModalOff
-  | FetchSelectedProduct;
+  | FetchSelectedProduct
+  |FetchDeletedProduct
+  |ChangeLoadingInd;

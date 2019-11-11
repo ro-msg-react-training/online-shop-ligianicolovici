@@ -7,6 +7,8 @@ import { loadProducts, fetchTheList } from "../../actions/productListActions";
 import { connect } from "react-redux";
 import { ProductListView, IDumbProdList } from "./dumbProductList";
 import defaultImg from "../../default.jpg";
+import { lifecycle, compose } from "recompose";
+import { withLoading } from "../HOCS/LoaderHOC";
 
 export interface LocalState {
   match?: any;
@@ -18,14 +20,19 @@ interface ProductListProps {
   loadProducts: (data: IProduct[], isLoading: boolean) => void;
   fetchList: () => void;
 }
-
-export class ProductList extends React.Component<ProductListProps> {
-  callLoadProducts() {
+const onComponentDidMountList = lifecycle<ProductListProps, {}, {}>({
+  componentDidMount() {
     this.props.fetchList();
   }
-  componentDidMount() {
-    this.callLoadProducts();
-  }
+});
+
+export class ProductList extends React.Component<ProductListProps> {
+  // callLoadProducts() {
+  //   this.props.fetchList();
+  // }
+  // componentDidMount() {
+  //   this.callLoadProducts();
+  // }
   render() {
     let sentData: IDumbProdList = {
       productList: [...this.props.productList],
@@ -47,9 +54,14 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchList: () => dispatch(fetchTheList())
 });
 
-const ProductListInitializer = connect(
+const ProductListInitializer =  compose<ProductListProps, {}> (
+  connect(
   mapStateToProps,
-  mapDispatchToProps
-)(ProductList);
+  mapDispatchToProps,
+),
+onComponentDidMountList,
+withLoading
+)
+(ProductList)
 
 export default ProductListInitializer;

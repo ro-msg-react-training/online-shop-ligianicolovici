@@ -303,6 +303,7 @@ export interface IStateCart {
   modalTitle: string;
   modalText: string;
   json: string;
+  isLoading:boolean;
 }
 export interface IOrder {
   productId: number;
@@ -324,6 +325,7 @@ export interface IStateDetails {
   cartItems: ICartProduct[];
   productToDelete: IProduct;
   fetchId: number;
+  isLoading:boolean;
 }
 // --------- PopUp --------- //
 export interface IPropsModal {
@@ -347,7 +349,7 @@ export interface IStateEdit {
   productID: number;
   defaultProduct: IProduct,
   productToDisplay: IProduct,
-  // updatedProduct: IProduct
+  isloading:boolean;
 }
 export interface ISales{
   category:string,

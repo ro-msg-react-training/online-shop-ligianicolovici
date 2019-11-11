@@ -8,21 +8,21 @@ export interface IDumbProdList {
   defaultImg: string;
 }
 export const ProductListView = (props: IDumbProdList) => {
-  const [loading, setLoadingIndicator] = useState(props.isLoading);
+  // const [loading, setLoadingIndicator] = useState(props.isLoading);
 
-  useEffect(() => {
-    setLoadingIndicator(props.isLoading);
-  }, [props.isLoading]);
+  // useEffect(() => {
+  //   setLoadingIndicator(props.isLoading);
+  // }, [props.isLoading]);
 
-  let pageSetUp = () => {
-    if (loading === true) {
-      return (
-        <div className="pageloader is-active"><span className="title">Loading products</span></div>
-      );
-    } else {
-      return null;
-    }
-  };
+  // let pageSetUp = () => {
+  //   if (loading === true) {
+  //     return (
+  //       <div className="pageloader is-active"><span className="title">Loading products</span></div>
+  //     );
+  //   } else {
+  //     return null;
+  //   }
+  // };
   let products = [...props.productList].map((productt, key) => (
     <Link to={`/products/${productt.id}`}>
       <div className="product">
@@ -44,7 +44,7 @@ export const ProductListView = (props: IDumbProdList) => {
   return (
     <React.Fragment>
       <div id="content">
-        {pageSetUp()}
+        {/* {pageSetUp()} */}
         <div className="products">{products}</div>
       </div>
     </React.Fragment>

@@ -10,7 +10,10 @@ import {
   SHOW_POPUP,
   LOAD_PRODUCT,
   HIDE_POPUP,
-  DELETE_CURRENT_PRODUCT
+  DELETE_CURRENT_PRODUCT,
+  CHANGE_LOADING_INDICATOR,
+  FetchDeletedProduct,
+  ChangeLoadingInd
 } from "../actions/productActions";
 
 const initialDetailsState: IStateDetails = {
@@ -21,7 +24,8 @@ const initialDetailsState: IStateDetails = {
   titlePopUp: "",
   productToDelete: {} as any,
   cartItems: [],
-  fetchId: {} as any
+  fetchId: {} as any,
+  isLoading:false,
 };
 
 export function productManipulation(
@@ -40,7 +44,8 @@ export function productManipulation(
           selectedProduct: state.selectedProduct,
           titlePopUp: state.titlePopUp,
           cartItems: state.cartItems,
-          fetchId: state.fetchId
+          fetchId: state.fetchId,
+          isLoading:!state.isLoading
         };
       }
     case SHOW_POPUP:
@@ -53,7 +58,8 @@ export function productManipulation(
         selectedProduct: state.selectedProduct,
         productToDelete: state.productToDelete,
         cartItems: state.cartItems,
-        fetchId: state.fetchId
+        fetchId: state.fetchId,
+        isLoading:state.isLoading
       };
     case HIDE_POPUP:
       return {
@@ -64,7 +70,8 @@ export function productManipulation(
         selectedProduct: state.selectedProduct,
         productToDelete: state.productToDelete,
         cartItems: state.cartItems,
-        fetchId: state.fetchId
+        fetchId: state.fetchId,
+        isLoading:state.isLoading
       };
     case LOAD_PRODUCT:
       const loadAction: ProductDisplay = action as ProductDisplay;
@@ -76,20 +83,36 @@ export function productManipulation(
         productToDelete: state.productToDelete,
         showModel: state.showModel,
         cartItems: state.cartItems,
-        fetchId: state.fetchId
+        fetchId: state.fetchId,
+        isLoading:true
       };
     case GET_SELECTED_PRODUCT:
       const fetchAction: FetchSelectedProduct = action as FetchSelectedProduct;
       return {
         ...state,
-        fetchId: fetchAction.productID
+        fetchId: fetchAction.productID,
+        isLoading:true
       };
     case DELETE_CURRENT_PRODUCT:
-      const fetchDeleteAction: FetchSelectedProduct = action as FetchSelectedProduct;
+      const fetchDeleteAction: FetchDeletedProduct = action as FetchDeletedProduct;
       return {
-        ...state,
-        fetchId: fetchDeleteAction.productID
+        selectedProduct: state.selectedProduct,
+        dataToExport: state.dataToExport,
+        messagePopUp: state.messagePopUp,
+        titlePopUp: state.titlePopUp,
+        productToDelete: state.productToDelete,
+        showModel: state.showModel,
+        cartItems: state.cartItems,
+        fetchId: fetchDeleteAction.productID,
+        isLoading:fetchDeleteAction.isLoading,
+        
       };
+      case CHANGE_LOADING_INDICATOR:
+        const actionStatus:ChangeLoadingInd= action as ChangeLoadingInd
+        return {
+          ...state,
+          isLoading:actionStatus.isLoading
+        };
     default:
       return state;
   }

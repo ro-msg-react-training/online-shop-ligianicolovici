@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../productModeling/product.css";
 import {
   IProduct,
@@ -15,14 +15,17 @@ import {
   showThePopUp,
   hideThePopUp,
   fetchSelected,
-  fetchDelete
+  fetchDelete,
+  changeLoadingIndicator
 } from "../../actions/productActions";
-import { loadCart, eraseItem } from "../../actions/shoppingActions";
+import { loadCart, eraseItem, switchLoading } from "../../actions/shoppingActions";
 import { loadProducts } from "../../actions/productListActions";
 import { displayProduct } from "../../actions/editActions";
 import defaultImg from "../../default.jpg";
 import { IDumbDetails, ProductDetailsView } from "./dumbDetails";
 import { number } from "prop-types";
+import { lifecycle, compose } from "recompose";
+import { withLoading } from "../HOCS/LoaderHOC";
 
 library.add(faShoppingBasket, faEraser);
 
@@ -51,19 +54,18 @@ interface ProductDetailsProps {
   deleteProductFromCart: (product: IProduct) => void;
   transferProductToEdit: (product: IProduct, msg: string) => void;
   crtCart: ICartProduct[];
-  fetchDelete: (id: number) => void;
+  fetchDelete: (id: number,loadingInd:boolean)=> void;
+  isLoading:boolean;
+  switchLoading:()=>void;
 }
-
+const onComponentDidMount = lifecycle<ProductDetailsProps, {}, {}>({
+  componentDidMount() {
+    this.props.fetchSelected(this.props.match.params.id);
+  }
+});
 class ProductDetails extends React.Component<ProductDetailsProps, LocalState> {
   constructor(props: ProductDetailsProps) {
     super(props);
-  }
-
-  callLoadProduct() {
-    this.props.fetchSelected(this.props.match.params.id);
-  }
-  componentDidMount() {
-    this.callLoadProduct();
   }
 
   deleteProduct(productID: number) {
@@ -76,7 +78,7 @@ class ProductDetails extends React.Component<ProductDetailsProps, LocalState> {
   }
 
   deleteItem(productToErase: IProduct) {
-    this.props.fetchDelete(productToErase.id);
+    this.props.fetchDelete(productToErase.id,!this.props.isLoading);
     this.props.hideThePopUp();
     this.props.deleteProductFromCart(productToErase);
   }
@@ -89,6 +91,7 @@ class ProductDetails extends React.Component<ProductDetailsProps, LocalState> {
     let titlePopUp;
     if (action === "add") {
       this.props.addToCart(product);
+      this.props.switchLoading.bind(this);
       messagePopUp =
         "Product " + product.name + " was succesfully added to the cart!";
       titlePopUp = "Cart insertion confirmation";
@@ -126,7 +129,8 @@ const mapStateToProps = (state: AppState, myOwnState: LocalState) => ({
   messagePopUp: state.product.messagePopUp,
   titlePopUp: state.product.titlePopUp,
   productToDelete: state.product.productToDelete,
-  crtCart: state.shoppingCart.cartProducts
+  crtCart: state.shoppingCart.cartProducts,
+  isLoading:state.product.isLoading
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -143,11 +147,17 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   transferProductToEdit: (product: IProduct, msg: string) =>
     dispatch(displayProduct(product, msg)),
   fetchSelected: (id: number) => dispatch(fetchSelected(id)),
-  fetchDelete: (id: number) => dispatch(fetchDelete(id))
+  fetchDelete: (id: number,loadingInd:boolean) => dispatch(fetchDelete(id,loadingInd)),
+  switchLoading:()=>dispatch(switchLoading()),
 });
 
-const ProductDetailsInitializer = connect(
+const ProductDetailsInitializer = compose<ProductDetailsProps, {}> (
+  connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProductDetails);
+),
+onComponentDidMount,
+withLoading
+)
+(ProductDetails);
 export default ProductDetailsInitializer;

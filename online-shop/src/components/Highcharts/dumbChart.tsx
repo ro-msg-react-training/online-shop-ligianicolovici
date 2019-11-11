@@ -50,7 +50,7 @@ export const ChartMaker = (props: IDumbChart) => {
     };
     return (
       <div>
-        <HighchartsReact highcharts={Highcharts} options={options} />
+        <HighchartsReact key={props.chartType} highcharts={Highcharts} options={options} />
       </div>
     );
   };
