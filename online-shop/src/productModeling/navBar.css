@@ -1,0 +1,10 @@
+div .navbar-brand .nav-logo{
+    margin-left: 0px;
+}
+div .navbar-brand img{
+    width:35px;
+    height: 90px;
+}
+div .navbar-brand p{
+   color:white;
+}

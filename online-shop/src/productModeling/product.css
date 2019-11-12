@@ -1,0 +1,28 @@
+div .productDetails{
+  box-shadow: 1px 1px 2px 2px #BBC6CC;
+  padding: 5px 5px 0px 5px;
+  border-radius: 5px;
+    align-content:space-between;
+    margin-right: 40%;
+    margin-left:30%; 
+    margin-bottom: 2%;
+    margin-top:4%;
+    width: 90vh;
+    height: 70vh;
+    justify-content: center
+  
+  }
+  div .productDetails img{
+    height: 40%;
+    width: auto;
+
+  }
+  div .contentDetails{
+    height: 100vh;
+    border: #214d66e1;
+    border-width: 12px;
+    border-style: solid;
+    justify-content: flex;
+    align-items: center;
+    
+  }

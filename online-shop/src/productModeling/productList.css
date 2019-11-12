@@ -1,0 +1,28 @@
+#content {
+  border: #214d66e1;
+  border-width: 12px;
+  border-style: solid;
+  height: 100%;
+}
+div .products {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  width: 100%;
+  align-content: flex-start;
+}
+div .product {
+  box-shadow: 1px 1px 2px 2px #BBC6CC;
+  padding: 5px 5px 0px 5px;
+  border-radius: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 8px;
+  margin-top: 10px;
+  padding: 40px;
+  height: 96.5%;
+}
+div .product .price-tag {
+  align-self: flex-end;
+  font-size: 20px;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
